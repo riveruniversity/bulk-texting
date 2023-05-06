@@ -11,7 +11,7 @@ import { attendees } from './attendees';
 
 //2023-05-06 10:00
 const timestamp = ''; //! SET TIMESTAMP 2022-11-20 15:00
-const qrUrl = `https://rmi-texting.rmiwebservices.com`
+const qrUrl = process.env.QR_HOST
 //_const qrUrl = `http://localhost:1996`
 
 
@@ -27,6 +27,8 @@ const messages = new Messages(format)
 sendBulkMessagesWithBarcode();
 
 async function sendBulkMessagesWithBarcode() {
+
+	if (!qrUrl) throw "Missing environment variable QR_HOST."
 
 	//await Util.sleep(3000)
 

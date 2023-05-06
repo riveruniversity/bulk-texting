@@ -1,12 +1,13 @@
 {
   "name": "bulk-texting",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Send async single, bulk and bulk individual SMS and MMS with node-libcurl using eztexting-node.",
   "main": "./build/index.js",
   "scripts": {
     "start": "node build/index.js",
-    "text": "nodemon src/mass-text.ts",
-    "qr": "nodemon src/mass-qr.ts",
+    "text": "nodemon src/bulk-text.ts",
+    "qr-text": "nodemon src/bulk-qr-text.ts",
+    "qr-email": "nodemon src/bulk-qr-email.ts",
     "build": "tsc --project tsconfig.json"
   },
   "keywords": [
@@ -36,10 +37,12 @@
     "axios": "^0.27.2",
     "dotenv": "^16.0.1",
     "eztexting-node": "^0.0.9",
-    "fs-extra": "^10.1.0"
+    "fs-extra": "^10.1.0",
+    "nodemailer": "^6.9.1"
   },
   "devDependencies": {
     "@types/node": "^17.0.36",
+    "@types/nodemailer": "^6.4.7",
     "eslint": "^8.16.0",
     "nodemon": "^2.0.16",
     "ts-node": "^10.8.0",
