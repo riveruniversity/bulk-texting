@@ -5,7 +5,8 @@
   "main": "./build/index.js",
   "scripts": {
     "start": "node build/index.js",
-    "rmi": "nodemon src/masstext.ts",
+    "text": "nodemon src/mass-text.ts",
+    "qr": "nodemon src/mass-qr.ts",
     "build": "tsc --project tsconfig.json"
   },
   "keywords": [

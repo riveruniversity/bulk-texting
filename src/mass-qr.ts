@@ -44,6 +44,7 @@ async function sendBulkMessagesWithBarcode() {
 	}
 }
 //: -----------------------------------------
+
 // async function sendBulkMessages() {
 
 // 	 await createBarcodes(attendees);
@@ -59,15 +60,12 @@ async function sendBulkMessagesWithBarcode() {
 // 	}
 // }
 // //: -----------------------------------------
+
+
 async function createBarcode(attendee: Attendee) {
 
 	// console.log("🚀 createBarcode");
-	Util.logStatus({ status: 'Log', location: 'create_barcodes', message: 'started', phone: '' })
 
-
-	// for(let i=0; i< attendees.length;i+=10) {
-
-	// (let attendee of attendees) {
 	return axios.post(qrUrl + `/qr/create/${attendee.barcode}.png`, {
 		firstName: attendee.first,
 		lastName: attendee.last,
