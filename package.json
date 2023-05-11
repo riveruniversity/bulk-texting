@@ -36,12 +36,12 @@
   "dependencies": {
     "axios": "^0.27.2",
     "dotenv": "^16.0.1",
-    "eztexting-node": "^0.0.9",
+    "eztexting-node": "^0.0.10",
     "fs-extra": "^10.1.0",
     "nodemailer": "^6.9.1"
   },
   "devDependencies": {
-    "@types/node": "^17.0.36",
+    "@types/node": "~20.1.0",
     "@types/nodemailer": "^6.4.7",
     "eslint": "^8.16.0",
     "nodemon": "^2.0.16",

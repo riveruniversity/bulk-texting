@@ -1,6 +1,4 @@
-import axios from 'axios'
-
-import { Messages, MediaFilesCreate, MediaFilesDelete } from 'eztexting-node'
+import { Messages } from 'eztexting-node'
 import { Message, MessageWithFile, ResponseFormat } from 'eztexting-node'
 import { Util } from 'eztexting-node'
 import { Contact } from 'eztexting-node/src/types/Contacts'
@@ -8,17 +6,14 @@ import { Attendee, AttendeeWithFile } from './Types'
 
 // >>> Settings
 import { attendees } from './attendees';
+import { showPercent } from './services/Util'
 
 const timestamp = ''; //! SET TIMESTAMP 2022-11-20 15:00
-const qrUrl = `https://rmi-texting.rmiwebservices.com`
-//_const qrUrl = `http://localhost:1996`
-
+const qrUrl = process.env.QR_HOST;
 
 
 // >>> Start
 const format: ResponseFormat = 'json';
-const newMedia = new MediaFilesCreate(format);
-const delMedia = new MediaFilesDelete(format);
 const messages = new Messages(format)
 
 
@@ -27,12 +22,13 @@ sendBulkMessages();
 
 async function sendBulkMessages() {
 
+	if (!qrUrl) throw "Missing environment variable QR_HOST."
+
 	for (let i in attendees) {
 
-		const attendee: Contact = attendees[i];
-
-		const percent: string = ((+i + 1) / attendees.length * 100).toFixed(1)
-		console.log('🔔', `${+i + 1} (${percent}%)`, attendee.phone);
+		const attendee: Attendee = attendees[i];
+		
+		showPercent(i, attendees)
 
 		createMessage(attendee)
 

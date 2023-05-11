@@ -3,7 +3,7 @@ export interface Attendee {
 	last: string;
 	phone: string | number;
 	barcode: string;
-	fam?: boolean;
+	fam: boolean;
 	file?: number;
 	email: string;
 }

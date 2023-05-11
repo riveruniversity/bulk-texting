@@ -2,6 +2,7 @@
 import path from "path";
 const fs = require("fs");
 
+import { Attendee } from "../Types";
 
 export const color = {
     'black': 30,
@@ -38,10 +39,10 @@ export function getDateTime() {
 }
 
 
-export function getTimestamp (stringTime: string | undefined) {
+export function getTimestamp(stringTime: string | undefined) {
 
-    if(!stringTime) return ''.toString();
-    
+    if (!stringTime) return ''.toString();
+
     const dateTime = new Date(stringTime);
     const timestamp = dateTime.getTime() / 1000;
     return timestamp.toString();
@@ -62,19 +63,26 @@ export async function logStatus(log: Log) {
     try {
         //_console.log("🗒️  logging " + log.location);
 
-        
+
 
         const msg = `${getDateTime()} | ${log.status}: ${log.id ? log.id : ''} | ${log.phone ? log.phone + ' | ' : ''}${log.message} \n`;
 
         const file = path.resolve(process.cwd(), 'logs', `${log.location}.log`);
-        fs.writeFileSync(file, msg, {flag: 'a+'}); //r w+
+        fs.writeFileSync(file, msg, { flag: 'a+' }); //r w+
     }
-    catch(error) {
+    catch (error) {
         console.error(error)
     }
 }
 
 
-export function sleep (milliseconds: number) {
-    return new Promise(resolve => setTimeout(resolve, milliseconds));
-  };
+export function sleep(milliseconds: number) {
+  return new Promise(resolve => setTimeout(resolve, milliseconds));
+};
+
+
+
+export async function showPercent(i: string, arr: Attendee[]): Promise<void> {
+    const percent: string = ((+i + 1) / arr.length * 100).toFixed(1)
+    console.log('🔔', `${+i + 1} (${percent}%)`, arr[+i].barcode);
+}

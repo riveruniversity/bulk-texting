@@ -5,7 +5,7 @@ import { sendEmail } from './services/Email'
 import { attendees } from './attendees';
 
 import { Attendee, AttendeeWithFile } from './Types'
-import { sleep } from './services/Util';
+import { showPercent, sleep } from './services/Util';
 import { error } from 'console';
 
 // >>> Settings
@@ -26,8 +26,7 @@ async function sendBulkEmailsWithBarcode() {
 
     const attendee: Attendee = attendees[i];
 
-    const percent: string = ((+i + 1) / attendees.length * 100).toFixed(1)
-    console.log('🔔', `${+i + 1} (${percent}%)`, attendee.barcode);
+    showPercent(i, attendees);
 
     await createBarcode(attendee)
       .then(createEmail)
@@ -140,5 +139,5 @@ async function createEmail(attendee: Attendee): Promise<Attendee> {
 
 
 async function done(attendee: Attendee) {
-  console.log('✅  Done: ', attendee.phone)
+  console.log('✅  Done: ', attendee.barcode)
 }
