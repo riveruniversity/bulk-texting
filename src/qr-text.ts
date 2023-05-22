@@ -1,4 +1,5 @@
 import axios from 'axios'
+import dotenv from 'dotenv'
 
 import { Messages, MediaFilesCreate, MediaFilesDelete } from 'eztexting-node'
 import { Message, MessageWithFile, ResponseFormat } from 'eztexting-node'
@@ -8,6 +9,7 @@ import { Attendee, AttendeeWithFile } from './Types'
 
 // >>> Settings
 import { attendees } from './attendees';
+dotenv.config();
 
 //2023-05-06 10:00
 const timestamp = ''; //! SET TIMESTAMP 2022-11-20 15:00
@@ -27,6 +29,8 @@ const messages = new Messages(format)
 sendBulkMessagesWithBarcode();
 
 async function sendBulkMessagesWithBarcode() {
+
+	console.log('qrUrl', qrUrl)
 
 	if (!qrUrl) throw "Missing environment variable QR_HOST."
 
@@ -90,31 +94,13 @@ async function createMessage(attendee: AttendeeWithFile, error?: Error) {
 
 	var text = ''
 	if (!attendee.fam) {
-		// var text = `Good morning ${attendee.first}. Present your fast pass along with your goverment-issued ID at the check-in.`
 		text = `
-Good morning ${attendee.first},
-
-We are excited to inform you that we have worked diligently to resolve past registration issues including wi-fi outages, which caused delays and required the completion of additional forms.
-
-With the new DIGITAL FAST PASS, you will be able to enter the show quickly by using the fast lane.
-
-We will have your physical RIVER CAR CLUB BADGE ready at our next show on June 10th for easy entry in the future.
-
-River Car Show Updates in Brief:
-1. QR Code FAST PASS
-2. New Judge Rotations
-3. New Best in Show Prize of $750 and Best in Show Trophy
-4. New Attractions: RC Car Race Track, Foosball, and Air Hockey Table
-
-Thank you for being a part of the River Car Show.
-
-If you have any questions or comments, please email us at rivercarshow@gmail.com
-
-Thank You,
-River Car Show Team`
+		Good morning ${attendee.first}. Present your fast pass along with your government-issued ID at the check-in.
+		Thank you for joining us at the 2023 Spring Minister's & Leader's Conference - Overflow.
+		`
 	}
 	else
-		// var text = '' // doesn't work when sending blank text. don't add Message param with blank text
+		// var text = '' // doesn't work when sending blank text! => don't add Message param with blank text
 		var text = `${attendee.first}'s fast pass`
 
 	const message: MessageWithFile = { PhoneNumbers: attendee.phone, StampToSend: timestamp, MessageTypeID: '3', FileID: attendee.file, Message: text };

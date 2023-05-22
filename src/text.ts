@@ -4,21 +4,20 @@ import { Util } from 'eztexting-node'
 import { Contact } from 'eztexting-node/src/types/Contacts'
 import { Attendee, AttendeeWithFile } from './Types'
 
-// >>> Settings
+
 import { attendees } from './attendees';
 import { showPercent } from './services/Util'
 
-const timestamp = ''; //! SET TIMESTAMP 2022-11-20 15:00
+const format: ResponseFormat = 'json';
+const messages = new Messages(format)
 const qrUrl = process.env.QR_HOST;
 
 
+// >>> Settings
+const timestamp = ''; //! SET TIMESTAMP 2022-11-20 15:00
+
 // >>> Start
-const format: ResponseFormat = 'json';
-const messages = new Messages(format)
-
-
 sendBulkMessages();
-
 
 async function sendBulkMessages() {
 

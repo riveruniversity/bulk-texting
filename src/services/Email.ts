@@ -6,6 +6,19 @@ import { Attendee } from '../Types';
 
 dotenv.config();
 
+const transporter = nodemailer.createTransport({
+  pool: true,
+  host: "smtp.gmail.com",
+  port: 465, // 587 and secure: false
+  secure: true, 
+  maxConnections: 11,
+  maxMessages: Infinity,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
+
 
 export interface LogMail {
   subject: string;
@@ -22,20 +35,11 @@ export async function sendEmail(data: LogMail): Promise<Attendee> {
 
   if(!process.env.EMAIL_USER || !process.env.EMAIL_PASS) throw "Missing environment variables EMAIL_USER or EMAIL_PASS."
 
-  const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
-    }
-  });
 
   const mailOptions = {
     from: {
       name: process.env.SENDER_NAME || '',
-      address: process.env.EMAIL_USER
+      address: process.env.SENDER_EMAIL || ''
     },
     to: data.to,
     // to: process.env.ADMIN_EMAIL,
@@ -44,10 +48,12 @@ export async function sendEmail(data: LogMail): Promise<Attendee> {
     html: body
   };
 
+
   return transporter.sendMail(mailOptions)
     .then(() => {
       console.log(`📧 Email sent to ${data.person.first} ${data.person.last}`);
-			Util.logStatus({ status: 'Success', location: 'email', phone: String(data.person.phone), message: data.person.email, id: data.person.barcode })
+			Util.logStatus({ status: 'Success', location: 'email', message: data.person.email, phone: String(data.person.phone), id: data.person.barcode })
+      // transporter.close();
       return data.person
     })
     .catch(error => {
