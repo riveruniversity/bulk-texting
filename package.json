@@ -1,6 +1,6 @@
 {
   "name": "bulk-texting",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Send async single, bulk and bulk individual SMS and MMS with node-libcurl using eztexting-node.",
   "main": "./build/index.js",
   "scripts": {

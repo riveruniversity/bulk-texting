@@ -1,0 +1,20 @@
+Good morning ${attendee.first},
+
+We are excited to inform you that we have worked diligently to resolve past registration issues including wi-fi outages, which caused delays and required the completion of additional forms.
+
+With the new DIGITAL FAST PASS, you will be able to enter the show quickly by using the fast lane.
+
+We will have your physical RIVER CAR CLUB BADGE ready at our next show on June 10th for easy entry in the future.
+
+River Car Show Updates in Brief:
+1. QR Code FAST PASS
+2. New Judge Rotations
+3. New Best in Show Prize of $750 and Best in Show Trophy
+4. New Attractions: RC Car Race Track, Foosball, and Air Hockey Table
+
+Thank you for being a part of the River Car Show.
+
+If you have any questions or comments, please email us at rivercarshow@gmail.com
+
+Thank You,
+River Car Show Team

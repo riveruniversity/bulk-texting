@@ -1,11 +1,11 @@
 export interface Attendee {
 	first: string;
 	last: string;
+	email: string;
 	phone: string | number;
 	barcode: string;
 	fam: boolean;
 	file?: number;
-	email: string;
 
 	url?: string;
 }

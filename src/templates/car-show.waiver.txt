@@ -1,0 +1,20 @@
+Good morning ${attendee.first},
+
+The River Car Show is held on private property. Every person entering the property is required to sign a Waiver and Liability Form.
+
+To bypass slow registration lines, please sign the waiver online at https://tinyurl.com/rivercarshow?id=69198
+
+We'll have your RIVER CAR CLUB BADGE ready for you at our next show on June 10th, so you can easily enter future events.
+
+River Car Show Updates in Brief:
+1. QR Code FAST PASS
+2. New Judge Rotations
+3. New Best in Show Prize of $750 and Best in Show Trophy
+4. New Attractions: RC Car Race Track, Foosball, and Air Hockey Table
+
+Thank you for being a part of the River Car Show.
+
+If you have any questions or comments, please email us at rivercarshow@gmail.com
+
+Thank You,
+River Car Show Team
