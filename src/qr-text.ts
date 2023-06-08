@@ -95,8 +95,8 @@ async function createMessage(attendee: AttendeeWithFile, error?: Error) {
 	var text = ''
 	if (!attendee.fam) {
 		text = `
-		Good morning ${attendee.first}. Present your fast pass along with your government-issued ID at the check-in.
-		Thank you for joining us at the 2023 Spring Minister's & Leader's Conference - Overflow.
+		Good afternoon ${attendee.first}. Present your fast pass along with your government-issued ID at the check-in.
+		Thank you for joining us at the 2023 Spring Minister's & Leader's Conference - Graduation Ceremony.
 		`
 	}
 	else
@@ -125,7 +125,7 @@ async function done(message: Message) {
 
 
 
-async function createallBarcodes(attendees: Attendee[], error?: Error) {
+async function createAllBarcodes(attendees: Attendee[], error?: Error) {
 
 	console.log("🚀 createBarcodes");
 	Util.logStatus({ status: 'Log', location: 'create_barcodes', message: 'started', phone: '' })

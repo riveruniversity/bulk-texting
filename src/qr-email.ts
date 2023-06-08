@@ -12,11 +12,11 @@ import { showPercent, sleep } from './services/Util';
 
 dotenv.config();
 const qrUrl = process.env.QR_HOST;
-const compileFn: pug.compileTemplate = pug.compileFile('src/templates/conference.badge.pug', { compileDebug: true });
+//_const qrUrl = `http://localhost:1996`
+
 
 // >>> Settings
-const timestamp = ''; //! SET TIMESTAMP 2022-11-20 15:00
-//_const qrUrl = `http://localhost:1996`
+const compileFn: pug.compileTemplate = pug.compileFile('src/templates/graduation.badge.pug', { compileDebug: true });
 
 // >>> Start
 sendBulkEmailsWithBarcode();
