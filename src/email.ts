@@ -1,17 +1,18 @@
 import pug from 'pug';
+import dotenv from 'dotenv'
 import { Util } from 'eztexting-node';
 
 import { sendEmail } from './services/Email';
-import { attendees } from './attendees';
+import { attendees } from './data/attendees';
 
 import { Attendee, AttendeeWithFile } from './Types';
 import { showPercent, sleep } from './services/Util';
-
+dotenv.config();
 const qrUrl = process.env.QR_HOST;
 
 // >>> Settings
-const timestamp = ''; //! SET TIMESTAMP 2022-11-20 15:00
-const compileFn: pug.compileTemplate = pug.compileFile('src/templates/car-show.badge.pug');
+const template: string = 'car-show.waiver.pug'
+const compileFn: pug.compileTemplate = pug.compileFile('src/templates/'+ template);
 
 // >>> Start
 sendBulkEmails();
@@ -37,7 +38,7 @@ async function createEmail(attendee: Attendee): Promise<Attendee> {
 
 	try {
 		const body: string = compileFn(attendee)
-		return sendEmail({ subject: 'Digital Fast Pass', body, to: attendee.email, person: attendee })
+		return sendEmail({ subject: 'Car Show - Waiver', body, to: attendee.email, person: attendee })
 		.then((attendee) => {
       return attendee;
     })

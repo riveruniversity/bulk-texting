@@ -2,35 +2,33 @@ import axios from 'axios'
 import dotenv from 'dotenv'
 
 import { Messages, MediaFilesCreate, MediaFilesDelete } from 'eztexting-node'
-import { Message, MessageWithFile, ResponseFormat } from 'eztexting-node'
+import { Message, MessageWithFile } from 'eztexting-node'
 import { Util } from 'eztexting-node'
 
 import { Attendee, AttendeeWithFile } from './Types'
+import { showPercent, sleep } from './services/Util';
 
 // >>> Settings
-import { attendees } from './attendees';
+import { attendees } from './data/attendees';
 dotenv.config();
 
-//2023-05-06 10:00
-const timestamp = ''; //! SET TIMESTAMP 2022-11-20 15:00
+//
+const timestamp = '2023-07-08 10:00'; //! SET TIMESTAMP 2022-11-20 15:00
 const qrUrl = process.env.QR_HOST
 //_const qrUrl = `http://localhost:1996`
 
 
 
 // >>> Start
-const format: ResponseFormat = 'json';
-const newMedia = new MediaFilesCreate(format);
-const delMedia = new MediaFilesDelete(format);
-const messages = new Messages(format)
+const newMedia = new MediaFilesCreate();
+const delMedia = new MediaFilesDelete();
+const messages = new Messages()
 
 
 // sendBulkMessages();
 sendBulkMessagesWithBarcode();
 
 async function sendBulkMessagesWithBarcode() {
-
-	console.log('qrUrl', qrUrl)
 
 	if (!qrUrl) throw "Missing environment variable QR_HOST."
 
@@ -40,8 +38,7 @@ async function sendBulkMessagesWithBarcode() {
 
 		const attendee: Attendee = attendees[i];
 
-		const percent: string = ((+i+1) / attendees.length * 100).toFixed(1)
-		console.log('🔔', `${+i + 1} (${percent}%)`, attendee.barcode);
+		showPercent(i, attendees);
 
 		await createBarcode(attendee)
 			.then(()=> newMedia.createMediaFile(attendee, { filetype: 'png', url: qrUrl + '/qr/show/' }, createMessage))
@@ -95,15 +92,15 @@ async function createMessage(attendee: AttendeeWithFile, error?: Error) {
 	var text = ''
 	if (!attendee.fam) {
 		text = `
-		Good afternoon ${attendee.first}. Present your fast pass along with your government-issued ID at the check-in.
-		Thank you for joining us at the 2023 Spring Minister's & Leader's Conference - Graduation Ceremony.
+Good morning ${attendee.first}. Present your fast pass along with your government-issued ID at the check-in.
+Thank you for being a part of the River Car Show.
 		`
 	}
 	else
 		// var text = '' // doesn't work when sending blank text! => don't add Message param with blank text
 		var text = `${attendee.first}'s fast pass`
 
-	const message: MessageWithFile = { PhoneNumbers: attendee.phone, StampToSend: timestamp, MessageTypeID: '3', FileID: attendee.file, Message: text };
+	const message: MessageWithFile = { toNumbers: [attendee.phone], sendAt: timestamp, mediaFileId: attendee.file, message: text };
 
 	messages.sendMessage(message, attendee, deleteMediaFile)
 }
@@ -119,7 +116,7 @@ async function deleteMediaFile(message: MessageWithFile, error?: Error) {
 
 
 async function done(message: Message) {
-	console.log('✅  Done: ', message.PhoneNumbers)
+	console.log('✅  Done: ', message.toNumbers)
 }
 
 

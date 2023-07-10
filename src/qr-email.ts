@@ -5,7 +5,7 @@ import pug from 'pug';
 import { Util } from 'eztexting-node';
 
 import { sendEmail } from './services/Email'
-import { attendees } from './attendees';
+import { attendees } from './data/attendees';
 
 import { Attendee } from './Types'
 import { showPercent, sleep } from './services/Util';
@@ -16,7 +16,8 @@ const qrUrl = process.env.QR_HOST;
 
 
 // >>> Settings
-const compileFn: pug.compileTemplate = pug.compileFile('src/templates/graduation.badge.pug', { compileDebug: true });
+const template: string = 'car-show.badge.pug'
+const compileFn: pug.compileTemplate = pug.compileFile('src/templates/'+ template, { compileDebug: true });
 
 // >>> Start
 sendBulkEmailsWithBarcode();
@@ -32,9 +33,9 @@ async function sendBulkEmailsWithBarcode() {
 		showPercent(i, attendees);
 
 		await sleep(2000)
-		// await createBarcode(attendee)
-		// .then(createEmail)
-		createEmail(attendee)
+		await createBarcode(attendee)
+		.then(createEmail)
+		// createEmail(attendee)
 			.then(done)
 			.catch((error) => error)
 	}
@@ -69,8 +70,13 @@ async function createEmail(attendee: Attendee): Promise<Attendee> {
 
 	//_console.log('👤  Attendee: ', attendee.barcode)
 	// const qrBadgeUrl: string = qrUrl + `/qr/show/${attendee.barcode}.png`;
-	attendee.url = qrUrl + `/qr/show/${attendee.barcode}.png`;
-
+  // const res = await axios(qrUrl + `/qr/show/${attendee.barcode}.png`, {
+  //   responseType: 'arraybuffer'
+  // });
+  // `data:image/png;base64,${(res.data as Buffer).toString('base64')}`;
+	
+  attendee.url = qrUrl + `/qr/show/${attendee.barcode}.png`
+  
 	try {
 		const body: string = compileFn(attendee)
 		return sendEmail({ subject: 'Digital Fast Pass', body, to: attendee.email, person: attendee })
