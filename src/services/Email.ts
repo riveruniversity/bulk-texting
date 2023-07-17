@@ -58,7 +58,8 @@ export async function sendEmail(data: LogMail): Promise<Attendee> {
     })
     .catch(error => {
       console.log(`🛑 Error trying to send email to ${data.person.first} ${data.person.last}: \n`, error.response, error.code, error.responseCode)
-      Util.logStatus({ status: 'Error', location: 'email', message: String(data.person.barcode) + ' | ' + error.code + ' | ' + error.message + ' | ' + error.config.url, phone: String(data.person.phone), id: error.status })
+      console.log(error)
+      Util.logStatus({ status: 'Error', location: 'email', message: String(data.person.barcode) + ' | ' + error.code + ' | ' + error.message, phone: String(data.person.phone), id: error.status })
       throw error
     })
 }

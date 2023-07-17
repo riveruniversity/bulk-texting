@@ -13,10 +13,15 @@ import { showPercent, sleep } from './services/Util';
 dotenv.config();
 const qrUrl = process.env.QR_HOST;
 //_const qrUrl = `http://localhost:1996`
+const badge = {
+  532: '64b093dcf9c329b8d780d381', // kids
+  533: '64b08d1cf9c329b8d780d380', // youth
+  534: '64b4e1a3a503c129ee7f8d4e', // adult
+}
 
 
 // >>> Settings
-const template: string = 'car-show.badge.pug'
+const template: string = 'conference.badge.pug'
 const compileFn: pug.compileTemplate = pug.compileFile('src/templates/'+ template, { compileDebug: true });
 
 // >>> Start
@@ -29,13 +34,13 @@ async function sendBulkEmailsWithBarcode() {
 	for (let i in attendees) {
 
 		const attendee: Attendee = attendees[i];
+    const file = Buffer.from(`${badge[attendee.type]}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
+    attendee.url = qrUrl + `/badges/${file}.png`
 
 		showPercent(i, attendees);
 
 		await sleep(2000)
-		await createBarcode(attendee)
-		.then(createEmail)
-		// createEmail(attendee)
+		createEmail(attendee)
 			.then(done)
 			.catch((error) => error)
 	}
@@ -44,42 +49,13 @@ async function sendBulkEmailsWithBarcode() {
 
 
 
-async function createBarcode(attendee: Attendee): Promise<Attendee> {
-
-	// console.log("🚀 createBarcode");
-
-	return axios.post(qrUrl + `/qr/create/${attendee.barcode}.png`, {
-		firstName: attendee.first,
-		lastName: attendee.last,
-	})
-		.then((res: { status: any; config: any }) => {
-			console.log('🎫', 'createBarcode', res.status);
-			Util.logStatus({ status: 'Success', location: 'create_barcode', phone: String(attendee.phone), message: attendee.barcode, id: res.status })
-			return attendee
-		})
-		.catch((error: any) => {
-			console.error(error.code, error.config.url);
-			Util.logStatus({ status: 'Error', location: 'create_barcode', message: attendee.barcode + ' | ' + error.code + ' | ' + error.message + ' | ' + error.config.url, phone: String(attendee.phone), id: error.status })
-			throw error
-		});
-}
-
-
-
 async function createEmail(attendee: Attendee): Promise<Attendee> {
 
 	//_console.log('👤  Attendee: ', attendee.barcode)
-	// const qrBadgeUrl: string = qrUrl + `/qr/show/${attendee.barcode}.png`;
-  // const res = await axios(qrUrl + `/qr/show/${attendee.barcode}.png`, {
-  //   responseType: 'arraybuffer'
-  // });
-  // `data:image/png;base64,${(res.data as Buffer).toString('base64')}`;
-	
-  attendee.url = qrUrl + `/qr/show/${attendee.barcode}.png`
-  
+
 	try {
 		const body: string = compileFn(attendee)
-		return sendEmail({ subject: 'Digital Fast Pass', body, to: attendee.email, person: attendee })
+		return sendEmail({ subject: `Digital Fast Pass (${attendee.first})`, body, to: attendee.email, person: attendee })
 			.then((attendee) => { return attendee })
 			.catch((error) => { throw error })
 	}
