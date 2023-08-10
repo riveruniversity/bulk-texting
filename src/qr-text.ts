@@ -14,11 +14,7 @@ dotenv.config();
 // >>> Settings
 const timestamp = '2023-07-17 15:00'; //! SET TIMESTAMP 2022-11-20 15:00
 const qrUrl = process.env.QR_HOST
-const badge = {
-  532: '64b093dcf9c329b8d780d381', // kids
-  533: '64b08d1cf9c329b8d780d380', // youth
-  534: '64b4e1a3a503c129ee7f8d4e', // adult
-}
+const badge = '64bc95e6a503c129ee7f8d4f'
 
 //_const qrUrl = `http://localhost:1996`
 
@@ -37,7 +33,7 @@ async function sendBulkMessagesWithBarcode() {
 
   for (let i in attendees) {
     const attendee: Attendee = attendees[i];
-    const file = Buffer.from(`${badge[attendee.type]}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
+    const file = Buffer.from(`${badge}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
     const url = qrUrl + `/badges/${file}.png`
 
     showPercent(i, attendees);

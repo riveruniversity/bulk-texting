@@ -7,7 +7,6 @@ export interface Attendee {
 	fam: boolean;
 	file?: string;
 
-  type: 532 | 533 | 534;
 	url?: string;
 }
 
