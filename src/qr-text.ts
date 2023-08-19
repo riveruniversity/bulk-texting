@@ -12,9 +12,9 @@ import { attendees } from './data/attendees';
 dotenv.config();
 
 // >>> Settings
-const timestamp = '2023-07-17 15:00'; //! SET TIMESTAMP 2022-11-20 15:00
+const timestamp = '2023-08-18 15:00'; //! SET TIMESTAMP 2022-11-20 15:00
 const qrUrl = process.env.QR_HOST
-const badge = '64bc95e6a503c129ee7f8d4f'
+const badge = '64de80835a35d91af678d80b'
 
 //_const qrUrl = `http://localhost:1996`
 
@@ -44,6 +44,7 @@ async function sendBulkMessagesWithBarcode() {
     
     newMedia.createMediaFile(attendee, url, createMessage)
     // await createBarcode(attendee)
+    await Util.sleep(911)
   }
 }
 //: -----------------------------------------
@@ -57,7 +58,8 @@ async function createMessage(attendee: AttendeeWithFile, error?: Error) {
 
   var text = ''
   if (!attendee.fam) {
-    text = `Good afternoon. When you arrive, use this fast pass to check in at the kiosk. After the service, you can pick up your wristband from the registration tent.`
+    text = `Good afternoon, ${attendee.first}. Thank you for pre-registering for the This Is It Convention! 
+This is your DIGITAL FASTPASS. Please present it at the check-in kiosk along with your government issued ID.`
   }
   else
     // var text = '' // doesn't work when sending blank text! => don't add Message param with blank text
