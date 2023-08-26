@@ -13,12 +13,10 @@ const qrUrl = process.env.QR_HOST;
 
 
 // >>> Settings
-const timestamp = '2023-07-08 10:00'; //! SET TIMESTAMP 2022-11-20 15:00
+const timestamp = '2023-08-26 10:00'; //! SET TIMESTAMP 2022-11-20 15:00
 
 // >>> Start
-sendBulkMessages();
-
-async function sendBulkMessages() {
+(async function sendBulkMessages() {
 
 	if (!qrUrl) throw "Missing environment variable QR_HOST."
 
@@ -32,7 +30,7 @@ async function sendBulkMessages() {
 
 		await Util.sleep(200)
 	}
-}
+})()
 //: -----------------------------------------
 
 

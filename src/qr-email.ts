@@ -9,32 +9,26 @@ import { attendees } from './data/attendees';
 
 import { Attendee } from './Types'
 import { showPercent, sleep } from './services/Util';
+import { badge, template } from './data/vars';
 
 dotenv.config();
 const qrUrl = process.env.QR_HOST;
 //_const qrUrl = `http://localhost:1996`
-const badge = {
-  532: '64b093dcf9c329b8d780d381', // kids
-  533: '64b08d1cf9c329b8d780d380', // youth
-  534: '64b4e1a3a503c129ee7f8d4e', // adult
-}
 
 
 // >>> Settings
-const template: string = 'conference.badge.pug'
-const compileFn: pug.compileTemplate = pug.compileFile('src/templates/'+ template, { compileDebug: true });
+
+const compileFn: pug.compileTemplate = pug.compileFile('src/templates/'+ template.carShow, { compileDebug: true });
 
 // >>> Start
-sendBulkEmailsWithBarcode();
-
-async function sendBulkEmailsWithBarcode() {
+(async function sendBulkEmailsWithBarcode() {
 
 	if (!qrUrl) throw "Missing environment variable QR_HOST."
 
 	for (let i in attendees) {
 
 		const attendee: Attendee = attendees[i];
-    const file = Buffer.from(`${badge[attendee.type]}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
+    const file = Buffer.from(`${badge.carShow}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
     attendee.url = qrUrl + `/badges/${file}.png`
 
 		showPercent(i, attendees);
@@ -44,7 +38,7 @@ async function sendBulkEmailsWithBarcode() {
 			.then(done)
 			.catch((error) => error)
 	}
-}
+})()
 //: -----------------------------------------
 
 

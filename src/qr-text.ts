@@ -9,12 +9,12 @@ import { Attendee, AttendeeWithFile } from './Types'
 import { showPercent, sleep } from './services/Util';
 
 import { attendees } from './data/attendees';
+import { badge } from './data/vars'
 dotenv.config();
 
 // >>> Settings
-const timestamp = '2023-08-18 15:00'; //! SET TIMESTAMP 2022-11-20 15:00
+const timestamp = '2023-08-26 10:00'; //! SET TIMESTAMP 2022-11-20 15:00
 const qrUrl = process.env.QR_HOST
-const badge = '64de80835a35d91af678d80b'
 
 //_const qrUrl = `http://localhost:1996`
 
@@ -25,15 +25,13 @@ const delMedia = new MediaFilesDelete();
 const messages = new Messages();
 
 
-sendBulkMessagesWithBarcode();
-
-async function sendBulkMessagesWithBarcode() {
+(async function sendBulkMessagesWithBarcode() {
 
   if (!qrUrl) throw "Missing environment variable QR_HOST."
 
   for (let i in attendees) {
     const attendee: Attendee = attendees[i];
-    const file = Buffer.from(`${badge}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
+    const file = Buffer.from(`${badge.carShow}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
     const url = qrUrl + `/badges/${file}.png`
 
     showPercent(i, attendees);
@@ -46,7 +44,7 @@ async function sendBulkMessagesWithBarcode() {
     // await createBarcode(attendee)
     await Util.sleep(911)
   }
-}
+})()
 //: -----------------------------------------
 
 
@@ -58,8 +56,9 @@ async function createMessage(attendee: AttendeeWithFile, error?: Error) {
 
   var text = ''
   if (!attendee.fam) {
-    text = `Good afternoon, ${attendee.first}. Thank you for pre-registering for the This Is It Convention! 
-This is your DIGITAL FASTPASS. Please present it at the check-in kiosk along with your government issued ID.`
+    text = `Good morning ${attendee.first}. Present your fast pass along with your government-issued ID at the check-in.
+Thank you for being a part of the River Car Show.`
+
   }
   else
     // var text = '' // doesn't work when sending blank text! => don't add Message param with blank text

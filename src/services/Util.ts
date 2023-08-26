@@ -82,7 +82,8 @@ export function sleep(milliseconds: number) {
 
 
 
-export async function showPercent(i: string, arr: Attendee[]): Promise<void> {
+export function showPercent(i: string, arr: Attendee[]): void 
+{
     const percent: string = ((+i + 1) / arr.length * 100).toFixed(1)
     console.log('🔔', `${+i + 1} (${percent}%)`, arr[+i].barcode);
 }
