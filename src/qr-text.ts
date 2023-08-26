@@ -56,7 +56,7 @@ async function createMessage(attendee: AttendeeWithFile, error?: Error) {
 
   var text = ''
   if (!attendee.fam) {
-    text = `Good morning ${attendee.first}. Present your fast pass along with your government-issued ID at the check-in.
+    text = `Good afternoon ${attendee.first}. Here is your digital River Car Club fast pass. Present your fast pass along with your government-issued ID at the check-in.
 Thank you for being a part of the River Car Show.`
 
   }
