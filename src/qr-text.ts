@@ -9,14 +9,15 @@ import { Attendee, AttendeeWithFile } from './Types'
 import { showPercent, sleep } from './services/Util';
 
 import { attendees } from './data/attendees';
-import { badge } from './data/vars'
-dotenv.config();
+import { badges, qrUrl } from './data/vars';
+
+
 
 // >>> Settings
-const timestamp = '2023-08-26 10:00'; //! SET TIMESTAMP 2022-11-20 15:00
-const qrUrl = process.env.QR_HOST
+const timestamp = ''; //! SET TIMESTAMP 2022-11-20 15:00
+const badge = badges.mensConf
+// >>>> End
 
-//_const qrUrl = `http://localhost:1996`
 
 
 // >>> Start
@@ -31,7 +32,9 @@ const messages = new Messages();
 
   for (let i in attendees) {
     const attendee: Attendee = attendees[i];
-    const file = Buffer.from(`${badge.carShow}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
+    if (!attendee.phone) continue;
+
+    const file = Buffer.from(`${badge}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
     const url = qrUrl + `/badges/${file}.png`
 
     showPercent(i, attendees);
@@ -56,8 +59,8 @@ async function createMessage(attendee: AttendeeWithFile, error?: Error) {
 
   var text = ''
   if (!attendee.fam) {
-    text = `Good afternoon ${attendee.first}. Here is your digital River Car Club fast pass. Present your fast pass along with your government-issued ID at the check-in.
-Thank you for being a part of the River Car Show.`
+    text = `Present your fast pass along with your government-issued ID at the check-in.
+Thank you for joining us at the 2023 Men's Conference - Kingdom Business.`
 
   }
   else

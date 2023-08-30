@@ -1,8 +1,16 @@
-export const badge = {
-  carShow: '64b05ebfd4698cd0f5b7a9a7'
+import dotenv from 'dotenv'
+//import "dotenv/config.js";
+dotenv.config();
+export const qrUrl = process.env.QR_HOST;
+//_const qrUrl = `http://localhost:1996`
+
+export const badges = {
+  carShow: '64b05ebfd4698cd0f5b7a9a7',
+  mensConf: '64ef6630808c7da71dd2d213'
 }
 
-export const template = {
+export const templates = {
   youthConference: 'conference.badge.pug',
-  carShow: 'car-show.badge.pug'
+  carShow: 'car-show.badge.pug',
+  mensConf: 'mens-conf.badge.pug'
 }

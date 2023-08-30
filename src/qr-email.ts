@@ -1,5 +1,4 @@
-import axios from 'axios'
-import dotenv from 'dotenv'
+
 import pug from 'pug';
 
 import { Util } from 'eztexting-node';
@@ -9,16 +8,18 @@ import { attendees } from './data/attendees';
 
 import { Attendee } from './Types'
 import { showPercent, sleep } from './services/Util';
-import { badge, template } from './data/vars';
-
-dotenv.config();
-const qrUrl = process.env.QR_HOST;
-//_const qrUrl = `http://localhost:1996`
+import { badges, templates, qrUrl } from './data/vars';
 
 
 // >>> Settings
+const badge = badges.mensConf
+const template = templates.mensConf
+// >>>> End
 
-const compileFn: pug.compileTemplate = pug.compileFile('src/templates/'+ template.carShow, { compileDebug: true });
+
+
+
+const compileFn: pug.compileTemplate = pug.compileFile('src/templates/'+ template, { compileDebug: true });
 
 // >>> Start
 (async function sendBulkEmailsWithBarcode() {
@@ -28,7 +29,7 @@ const compileFn: pug.compileTemplate = pug.compileFile('src/templates/'+ templat
 	for (let i in attendees) {
 
 		const attendee: Attendee = attendees[i];
-    const file = Buffer.from(`${badge.carShow}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
+    const file = Buffer.from(`${badge}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
     attendee.url = qrUrl + `/badges/${file}.png`
 
 		showPercent(i, attendees);

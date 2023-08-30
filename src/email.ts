@@ -1,5 +1,4 @@
 import pug from 'pug';
-import dotenv from 'dotenv'
 import { Util } from 'eztexting-node';
 
 import { sendEmail } from './services/Email';
@@ -7,17 +6,14 @@ import { attendees } from './data/attendees';
 
 import { Attendee, AttendeeWithFile } from './Types';
 import { showPercent, sleep } from './services/Util';
-dotenv.config();
-const qrUrl = process.env.QR_HOST;
+import { qrUrl } from './data/vars';
 
 // >>> Settings
 const template: string = 'car-show.waiver.pug'
 const compileFn: pug.compileTemplate = pug.compileFile('src/templates/'+ template);
 
 // >>> Start
-sendBulkEmails();
-
-async function sendBulkEmails() {
+(async function sendBulkEmails() {
   if (!qrUrl) throw 'Missing environment variable QR_HOST.';
 
   for (let i in attendees) {
@@ -29,7 +25,7 @@ async function sendBulkEmails() {
       .then(done)
       .catch((error) => error);
   }
-}
+})()
 //: -----------------------------------------
 
 async function createEmail(attendee: Attendee): Promise<Attendee> {

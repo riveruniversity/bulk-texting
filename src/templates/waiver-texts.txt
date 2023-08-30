@@ -1,0 +1,5 @@
+Good morning ${attendee.first}. Present your fast pass along with your government-issued ID at the check-in.
+Thank you for joining us at the 2023 Spring Minister's & Leader's Conference - Overflow.
+
+Good afternoon ${attendee.first}. Here is your digital River Car Club fast pass. Present your fast pass along with your government-issued ID at the check-in.
+Thank you for being a part of the River Car Show.

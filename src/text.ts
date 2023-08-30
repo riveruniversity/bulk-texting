@@ -1,19 +1,19 @@
-import { Messages } from 'eztexting-node'
-import { Message } from 'eztexting-node'
-import { Util } from 'eztexting-node'
-import { Contact } from 'eztexting-node'
-import { Attendee } from './Types'
+import { Messages, Message, Util, Contact } from 'eztexting-node'
 
+import { Attendee } from './Types'
 
 import { attendees } from './data/attendees';
 import { showPercent } from './services/Util'
+import { qrUrl } from './data/vars'
 
 const messages = new Messages()
-const qrUrl = process.env.QR_HOST;
+
 
 
 // >>> Settings
 const timestamp = '2023-08-26 10:00'; //! SET TIMESTAMP 2022-11-20 15:00
+
+
 
 // >>> Start
 (async function sendBulkMessages() {
