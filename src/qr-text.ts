@@ -8,8 +8,9 @@ import { Util } from 'eztexting-node'
 import { Attendee, AttendeeWithFile } from './Types'
 import { showPercent, sleep } from './services/Util';
 
-import { attendees } from './data/attendees';
+// import { attendees } from './data/attendees';
 import { badges, qrUrl } from './data/vars';
+import { getAttendees, updateAttendee } from './services/DB'
 
 
 
@@ -29,6 +30,8 @@ const messages = new Messages();
 (async function sendBulkMessagesWithBarcode() {
 
   if (!qrUrl) throw "Missing environment variable QR_HOST."
+
+  const attendees = await getAttendees({ sentText: false, phone: { $ne: '' }});
 
   for (let i in attendees) {
     const attendee: Attendee = attendees[i];
@@ -74,9 +77,11 @@ Thank you for joining us at the 2023 Men's Conference - Kingdom Business.`
 //: -----------------------------------------
 
 
-async function deleteMediaFile(message: MessageWithFile, error?: Error) {
+async function deleteMediaFile(attendee: Attendee, message: MessageWithFile, error?: Error) {
 
   // console.log('📨  Message: ', message.PhoneNumbers)
+
+  updateAttendee( attendee, { sentText: true })
 
   delMedia.deleteMediaFile(message, done)
 }

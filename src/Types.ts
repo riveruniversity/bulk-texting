@@ -4,10 +4,15 @@ export interface Attendee {
 	email: string;
 	phone: string ;
 	barcode: string;
-	fam: boolean;
+	fam?: boolean;
 	file?: string;
 
 	url?: string;
+
+  // DB
+  _id?: string;
+  sentEmail?: boolean;
+  sentText?: boolean;
 }
 
 export interface AttendeeWithFile extends Attendee {

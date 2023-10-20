@@ -2,6 +2,10 @@ import dotenv from 'dotenv'
 //import "dotenv/config.js";
 dotenv.config();
 export const qrUrl = process.env.QR_HOST;
+
+export const dbUser = encodeURIComponent(process.env.MONGO_DB_USER || '');
+export const dbPass = encodeURIComponent(process.env.MONGO_DB_PASS || '');
+
 //_const qrUrl = `http://localhost:1996`
 
 export const badges = {

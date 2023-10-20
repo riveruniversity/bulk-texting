@@ -2,9 +2,10 @@ import { Messages, Message, Util, Contact } from 'eztexting-node'
 
 import { Attendee } from './Types'
 
-import { attendees } from './data/attendees';
+// import { attendees } from './data/attendees';
 import { showPercent } from './services/Util'
 import { qrUrl } from './data/vars'
+import { getAttendees } from './services/DB'
 
 const messages = new Messages()
 
@@ -19,6 +20,8 @@ const timestamp = '2023-08-26 10:00'; //! SET TIMESTAMP 2022-11-20 15:00
 (async function sendBulkMessages() {
 
 	if (!qrUrl) throw "Missing environment variable QR_HOST."
+
+  const attendees = await getAttendees({ sentText: false, phone: { $ne: '' }});
 
 	for (let i in attendees) {
 
@@ -58,6 +61,6 @@ River Car Show Team`
 //: -----------------------------------------
 
 
-async function done(message: Message) {
+async function done(contact: Attendee, message: Message, error: Error) {
 	console.log('✅  Done: ', message.toNumbers)
 }

@@ -4,11 +4,12 @@ import pug from 'pug';
 import { Util } from 'eztexting-node';
 
 import { sendEmail } from './services/Email'
-import { attendees } from './data/attendees';
+// import { attendees } from './data/attendees';
 
 import { Attendee } from './Types'
 import { showPercent, sleep } from './services/Util';
 import { badges, templates, qrUrl } from './data/vars';
+import { getAttendees, updateAttendee } from './services/DB';
 
 
 // >>> Settings
@@ -25,6 +26,8 @@ const compileFn: pug.compileTemplate = pug.compileFile('src/templates/'+ templat
 (async function sendBulkEmailsWithBarcode() {
 
 	if (!qrUrl) throw "Missing environment variable QR_HOST."
+  const attendees = await getAttendees({ sentEmail: false });
+  return
 
 	for (let i in attendees) {
 
@@ -64,5 +67,6 @@ async function createEmail(attendee: Attendee): Promise<Attendee> {
 
 
 async function done(attendee: Attendee) {
+  updateAttendee( attendee, { sentEmail: true })
 	console.log('✅  Done: ', attendee.barcode)
 }
