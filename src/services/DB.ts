@@ -13,9 +13,11 @@ const attendeeSchema = new Schema<Attendee>({
   email: String,
   phone: String,
   barcode: String,
-  fam: { type: Boolean, default: false },
+  fam: Boolean,
   sentEmail: { type: Boolean, default: false },
-  sentText: { type: Boolean, default: false }
+  sentText: { type: Boolean, default: false },
+  textError: String,
+  emailError: String
 });
 
 const Attendee = model<Attendee>('Attendee', attendeeSchema);
@@ -61,4 +63,6 @@ export async function saveAttendees(attendees: Attendee[]) {
 interface BulkInfo {
   sentEmail?: boolean;
   sentText?: boolean;
+  textError?: string;
+  emailError?: string;
 }

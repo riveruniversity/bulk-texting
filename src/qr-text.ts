@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import { Messages, MediaFilesCreate, MediaFilesDelete } from 'eztexting-node'
 import { Message, MessageWithFile } from 'eztexting-node'
 import { Util } from 'eztexting-node'
+import { Log } from 'eztexting-node/build/service/Util'
 
 import { Attendee, AttendeeWithFile } from './Types'
 import { showPercent, sleep } from './services/Util';
@@ -15,8 +16,10 @@ import { getAttendees, updateAttendee } from './services/DB'
 
 
 // >>> Settings
-const timestamp = ''; //! SET TIMESTAMP 2022-11-20 15:00
-const badge = badges.mensConf
+const timestamp = '2023-10-21 20:00'; //! SET TIMESTAMP 2022-11-20 15:00
+const badge = badges.mlc2023
+const eventText =  `Present your fast pass along with your government-issued ID at the check-in.
+Thank you for joining us at the 2023 Minister's & Leader's Conference - Breakthrough.`
 // >>>> End
 
 
@@ -31,7 +34,8 @@ const messages = new Messages();
 
   if (!qrUrl) throw "Missing environment variable QR_HOST."
 
-  const attendees = await getAttendees({ sentText: false, phone: { $ne: '' }});
+  const attendees = await getAttendees({ sentText: false, textError: { $exists: false}, phone: { $ne: '' } });
+  // const attendees = await getAttendees({ sentText: false, textError: { $exists: false}, phone: { $ne: '' }, _id: '126634' });
 
   for (let i in attendees) {
     const attendee: Attendee = attendees[i];
@@ -45,7 +49,7 @@ const messages = new Messages();
     while (newMedia.activeHandles > 6) {
       await Util.sleep(500)
     }
-    
+
     newMedia.createMediaFile(attendee, url, createMessage)
     // await createBarcode(attendee)
     await Util.sleep(911)
@@ -62,9 +66,7 @@ async function createMessage(attendee: AttendeeWithFile, error?: Error) {
 
   var text = ''
   if (!attendee.fam) {
-    text = `Present your fast pass along with your government-issued ID at the check-in.
-Thank you for joining us at the 2023 Men's Conference - Kingdom Business.`
-
+    text = eventText
   }
   else
     // var text = '' // doesn't work when sending blank text! => don't add Message param with blank text
@@ -77,11 +79,17 @@ Thank you for joining us at the 2023 Men's Conference - Kingdom Business.`
 //: -----------------------------------------
 
 
-async function deleteMediaFile(attendee: Attendee, message: MessageWithFile, error?: Error) {
+async function deleteMediaFile(attendee: Attendee, message: MessageWithFile, error?: Log) {
 
-  // console.log('📨  Message: ', message.PhoneNumbers)
+  // console.log('📨  Message: ', message)
 
-  updateAttendee( attendee, { sentText: true })
+  if (error) {
+    const errorMsg: EZError = error && JSON.parse(error.message);
+    updateAttendee(attendee, { textError: errorMsg.detail })
+  }
+  else {
+    updateAttendee(attendee, { sentText: true})
+  }
 
   delMedia.deleteMediaFile(message, done)
 }
@@ -139,3 +147,15 @@ async function failed(attendee: Attendee) {
 // }
 
 
+interface EZError {
+  status: number;
+  title: string;
+  detail: string;
+  errors: Errors[];
+}
+
+interface Errors {
+  code: string;
+  title: string;
+  message: string;
+}

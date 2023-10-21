@@ -13,35 +13,34 @@ import { getAttendees, updateAttendee } from './services/DB';
 
 
 // >>> Settings
-const badge = badges.mensConf
-const template = templates.mensConf
+const badge = badges.mlc2023
+const template = templates.mlc2023
 // >>>> End
 
 
 
-
-const compileFn: pug.compileTemplate = pug.compileFile('src/templates/'+ template, { compileDebug: true });
+const compileFn: pug.compileTemplate = pug.compileFile('src/templates/' + template, { compileDebug: true });
+failed.attempts = 0;
 
 // >>> Start
 (async function sendBulkEmailsWithBarcode() {
 
-	if (!qrUrl) throw "Missing environment variable QR_HOST."
-  const attendees = await getAttendees({ sentEmail: false });
-  return
+  if (!qrUrl) throw "Missing environment variable QR_HOST."
+  const attendees = await getAttendees({ sentEmail: false, email: { $ne: '' } });
 
-	for (let i in attendees) {
+  for (let i in attendees) {
 
-		const attendee: Attendee = attendees[i];
+    const attendee: Attendee = attendees[i];
     const file = Buffer.from(`${badge}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
     attendee.url = qrUrl + `/badges/${file}.png`
 
-		showPercent(i, attendees);
+    showPercent(i, attendees);
 
-		await sleep(2000)
-		createEmail(attendee)
-			.then(done)
-			.catch((error) => error)
-	}
+    await sleep(3000)
+    createEmail(attendee)
+      .then(done)
+      .catch((error) => failed(error, attendee))
+  }
 })()
 //: -----------------------------------------
 
@@ -49,24 +48,23 @@ const compileFn: pug.compileTemplate = pug.compileFile('src/templates/'+ templat
 
 async function createEmail(attendee: Attendee): Promise<Attendee> {
 
-	//_console.log('👤  Attendee: ', attendee.barcode)
+  //_console.log('👤  Attendee: ', attendee.barcode)
 
-	try {
-		const body: string = compileFn(attendee)
-		return sendEmail({ subject: `Digital Fast Pass (${attendee.first})`, body, to: attendee.email, person: attendee })
-			.then((attendee) => { return attendee })
-			.catch((error) => { throw error })
-	}
-	catch (error) {
-		console.log(error)
-		throw error
-	}
+  const body: string = compileFn(attendee)
+  return sendEmail({ subject: `Digital Fast Pass (${attendee.first})`, body, to: attendee.email, person: attendee })
+
 }
 //: -----------------------------------------
 
 
 
 async function done(attendee: Attendee) {
-  updateAttendee( attendee, { sentEmail: true })
-	console.log('✅  Done: ', attendee.barcode)
+  updateAttendee(attendee, { sentEmail: true })
+  console.log('✅  Done: ', attendee.barcode)
+}
+
+async function failed(error: Error, attendee: Attendee) {
+  updateAttendee(attendee, { emailError: error.message });
+  failed.attempts++;
+  console.log('Failed: ', attendee.barcode)
 }

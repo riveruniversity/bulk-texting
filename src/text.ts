@@ -21,7 +21,8 @@ const timestamp = '2023-08-26 10:00'; //! SET TIMESTAMP 2022-11-20 15:00
 
 	if (!qrUrl) throw "Missing environment variable QR_HOST."
 
-  const attendees = await getAttendees({ sentText: false, phone: { $ne: '' }});
+  const attendees = await getAttendees({ sentText: false, textError: { $exists: false}, phone: { $ne: '' }});
+
 
 	for (let i in attendees) {
 

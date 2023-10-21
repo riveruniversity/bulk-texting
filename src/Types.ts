@@ -13,6 +13,8 @@ export interface Attendee {
   _id?: string;
   sentEmail?: boolean;
   sentText?: boolean;
+  textError?: string;
+  emailError?: string;
 }
 
 export interface AttendeeWithFile extends Attendee {
