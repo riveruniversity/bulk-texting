@@ -1,4 +1,4 @@
-import { Schema, model, connect, HydratedDocument, Query, FilterQuery } from 'mongoose';
+import { Schema, model, connect, HydratedDocument, Query, FilterQuery, UpdateWithAggregationPipeline, UpdateQuery } from 'mongoose';
 import { dbUser, dbPass } from '../data/vars';
 import { Attendee } from '../Types'
 import * as fs from 'fs';
@@ -34,7 +34,7 @@ export async function saveAttendee(attendee: Attendee) {
     .catch(err => console.log('Error when saving attendee: ', attendee, err.result, err.results))
 }
 
-export async function updateAttendee(attendee: Attendee, update: BulkInfo) {
+export async function updateAttendee(attendee: Attendee, update: UpdateWithAggregationPipeline | UpdateQuery<Attendee>) {
   Attendee.updateOne({ barcode: attendee.barcode }, update)
     .catch(err => console.log('Error when updating attendee: ', attendee, err.result, err.results))
 }

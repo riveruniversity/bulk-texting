@@ -20,7 +20,7 @@ const template = templates.mlc2023
 
 
 const compileFn: pug.compileTemplate = pug.compileFile('src/templates/' + template, { compileDebug: true });
-failed.attempts = 0;
+let failedAttempts = 0;
 
 // >>> Start
 (async function sendBulkEmailsWithBarcode() {
@@ -30,13 +30,15 @@ failed.attempts = 0;
 
   for (let i in attendees) {
 
+    if (failedAttempts > 10 ) return;
+
     const attendee: Attendee = attendees[i];
     const file = Buffer.from(`${badge}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
     attendee.url = qrUrl + `/badges/${file}.png`
 
     showPercent(i, attendees);
 
-    await sleep(3000)
+    await sleep(5000)
     createEmail(attendee)
       .then(done)
       .catch((error) => failed(error, attendee))
@@ -59,12 +61,13 @@ async function createEmail(attendee: Attendee): Promise<Attendee> {
 
 
 async function done(attendee: Attendee) {
-  updateAttendee(attendee, { sentEmail: true })
+  updateAttendee(attendee, { sentEmail: true,  $unset: { emailError: "" } })
+  failedAttempts = 0;
   console.log('✅  Done: ', attendee.barcode)
 }
 
 async function failed(error: Error, attendee: Attendee) {
   updateAttendee(attendee, { emailError: error.message });
-  failed.attempts++;
+  failedAttempts++;
   console.log('Failed: ', attendee.barcode)
 }
