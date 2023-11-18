@@ -6,20 +6,20 @@ import { Message, MessageWithFile } from 'eztexting-node'
 import { Util } from 'eztexting-node'
 import { Log } from 'eztexting-node/build/service/Util'
 
-import { Attendee, AttendeeWithFile } from './Types'
+import { Attendee, AttendeeWithFile, Daytime, Timestamp } from './Types'
 import { showPercent, sleep } from './services/Util';
 
 // import { attendees } from './data/attendees';
-import { badges, qrUrl } from './data/vars';
+import { events, qrUrl } from './data/vars';
 import { getAttendees, updateAttendee } from './services/DB'
 
 
 
 // >>> Settings
-const timestamp = '2023-10-21 20:00'; //! SET TIMESTAMP 2022-11-20 15:00
-const badge = badges.mlc2023
-const eventText =  `Present your fast pass along with your government-issued ID at the check-in.
-Thank you for joining us at the 2023 Minister's & Leader's Conference - Breakthrough.`
+const timestamp: Timestamp = ''; //! SET TIMESTAMP 2022-11-20 15:00
+const dayTime: Daytime = 'morning'
+const badge: string = events.carShow.badge;
+const eventText: string =  events.carShow.text;
 // >>>> End
 
 
@@ -34,8 +34,8 @@ const messages = new Messages();
 
   if (!qrUrl) throw "Missing environment variable QR_HOST."
 
-  const attendees = await getAttendees({ sentText: false, textError: { $exists: false}, phone: { $ne: '' } });
-  // const attendees = await getAttendees({ sentText: false, textError: { $exists: false}, phone: { $ne: '' }, _id: '126634' });
+  // const attendees = await getAttendees({ sentText: false, textError: { $exists: false}, phone: { $ne: '' } });
+  const attendees = await getAttendees({ _id: '126634' });
 
   for (let i in attendees) {
     const attendee: Attendee = attendees[i];
@@ -44,11 +44,12 @@ const messages = new Messages();
     const file = Buffer.from(`${badge}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
     const url = qrUrl + `/badges/${file}.png`
 
-    showPercent(i, attendees);
 
     while (newMedia.activeHandles > 6) {
       await Util.sleep(500)
     }
+
+    showPercent(i, attendees);
 
     newMedia.createMediaFile(attendee, url, createMessage)
     // await createBarcode(attendee)
@@ -66,7 +67,7 @@ async function createMessage(attendee: AttendeeWithFile, error?: Error) {
 
   var text = ''
   if (!attendee.fam) {
-    text = eventText
+    text = `Good ${dayTime} ${attendee.first}. `+ eventText
   }
   else
     // var text = '' // doesn't work when sending blank text! => don't add Message param with blank text

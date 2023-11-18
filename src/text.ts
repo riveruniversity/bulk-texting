@@ -1,6 +1,6 @@
 import { Messages, Message, Util, Contact } from 'eztexting-node'
 
-import { Attendee } from './Types'
+import { Attendee, Timestamp } from './Types'
 
 // import { attendees } from './data/attendees';
 import { showPercent } from './services/Util'
@@ -12,7 +12,7 @@ const messages = new Messages()
 
 
 // >>> Settings
-const timestamp = '2023-08-26 10:00'; //! SET TIMESTAMP 2022-11-20 15:00
+const timestamp: Timestamp = ''; //! SET TIMESTAMP 2022-11-20 15:00
 
 
 

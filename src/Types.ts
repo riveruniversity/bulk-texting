@@ -21,3 +21,6 @@ export interface AttendeeWithFile extends Attendee {
 	file: string;
 }
 
+export type Timestamp = `${number}${number}${number}${number}-${number}${number}-${number}${number} ${number}${number}:${number}${number}` | ''
+
+export type Daytime = 'morning' | 'afternoon' | 'evening'

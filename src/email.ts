@@ -18,6 +18,8 @@ const compileFn: pug.compileTemplate = pug.compileFile('src/templates/' + templa
   if (!qrUrl) throw 'Missing environment variable QR_HOST.';
 
   const attendees = await getAttendees({ sentEmail: false, email: { $ne: '' } });
+  //const attendees = await getAttendees({ _id: '126634' });
+
 
   for (let i in attendees) {
     const attendee: Attendee = attendees[i];

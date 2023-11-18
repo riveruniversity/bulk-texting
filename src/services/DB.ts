@@ -40,7 +40,7 @@ export async function updateAttendee(attendee: Attendee, update: UpdateWithAggre
 }
 
 export async function getAttendees(filter: FilterQuery<Attendee>): Promise<Attendee[]> {
-  console.log(new Date().getTime(), '🔗 getting attendees from DB')
+  console.log(new Date().getTime(), '👥 getting attendees from DB')
   return Attendee.find(filter || {})
 }
 
@@ -52,7 +52,7 @@ export async function saveAttendees(attendees: Attendee[]) {
       console.log('Error when trying to save all attendees. See errors.json for more details!')
       console.log(err.insertedDocs.length, 'saved.')
       console.log(err.writeErrors.length, 'skipped.')
-      fs.writeFileSync(__dirname + '/errors.json', JSON.stringify(err.writeErrors, null, '\t'));
+      fs.writeFileSync('src/data/errors.json', JSON.stringify(err.writeErrors, null, '\t'));
     })
 }
 

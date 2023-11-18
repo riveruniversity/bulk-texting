@@ -8,13 +8,13 @@ import { sendEmail } from './services/Email'
 
 import { Attendee } from './Types'
 import { showPercent, sleep } from './services/Util';
-import { badges, templates, qrUrl } from './data/vars';
+import { events, qrUrl } from './data/vars';
 import { getAttendees, updateAttendee } from './services/DB';
 
 
 // >>> Settings
-const badge = badges.mlc2023
-const template = templates.mlc2023
+const badge = events.carShow.badge
+const template = events.carShow.emailTemplate
 // >>>> End
 
 
@@ -27,6 +27,8 @@ let failedAttempts = 0;
 
   if (!qrUrl) throw "Missing environment variable QR_HOST."
   const attendees = await getAttendees({ sentEmail: false, email: { $ne: '' } });
+  // const attendees = await getAttendees({ _id: '126634' });
+
 
   for (let i in attendees) {
 
