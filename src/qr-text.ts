@@ -17,9 +17,9 @@ import { getAttendees, updateAttendee } from './services/DB'
 
 // >>> Settings
 const timestamp: Timestamp = ''; //! SET TIMESTAMP 2022-11-20 15:00
-const dayTime: Daytime = 'morning'
-const badge: string = events.carShow.badge;
-const eventText: string =  events.carShow.text;
+const dayTime: Daytime = 'evening'
+const badge: string = events.turkeyFest.badge;
+const eventText: string =  events.turkeyFest.text;
 // >>>> End
 
 
@@ -34,8 +34,8 @@ const messages = new Messages();
 
   if (!qrUrl) throw "Missing environment variable QR_HOST."
 
-  // const attendees = await getAttendees({ sentText: false, textError: { $exists: false}, phone: { $ne: '' } });
-  const attendees = await getAttendees({ _id: '126634' });
+  const attendees = await getAttendees({ sentText: false, textError: { $exists: false}, phone: { $ne: '' } });
+  // const attendees = await getAttendees({ _id: '126634' });
 
   for (let i in attendees) {
     const attendee: Attendee = attendees[i];

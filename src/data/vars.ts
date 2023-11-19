@@ -27,7 +27,13 @@ export const events = {
     text: ''
   },
   youthConference: {
+    badge: '',
     emailTemplate: 'conference.badge.pug',
-
+    text: ``
+  },
+  turkeyFest: {
+    badge: '655957c04fa561c20a8b1eca',
+    emailTemplate: '',
+    text: `This pass is for quick entrance. Head to the turkey registration to get a turkey giveaway sticker.`
   }
 }
