@@ -35,5 +35,10 @@ export const events = {
     badge: '655957c04fa561c20a8b1eca',
     emailTemplate: '',
     text: `This pass is for quick entrance. Head to the turkey registration to get a turkey giveaway sticker.`
+  },
+  christmas: {
+    badge: '657cb9264fa561c20a8b1ecb',
+    emailTemplate: '',
+    text: `This pass is for quick entrance only. After entering head to the toy registration to get your toy giveaway bracelet.`
   }
 }
