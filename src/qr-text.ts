@@ -16,15 +16,15 @@ import { getAttendees, updateAttendee } from './services/DB'
 
 
 // >>> Settings
-const timestamp: Timestamp = ''; //! SET TIMESTAMP 2022-11-20 15:00
-const dayTime: Daytime = 'evening'
-const badge: string = events.turkeyFest.badge;
-const eventText: string =  events.turkeyFest.text;
+const timestamp: Timestamp = '2023-12-17 07:00'; //! SET TIMESTAMP 2022-11-20 15:00
+const dayTime: Daytime = 'morning'
+const badge: string = events.christmas.badge;
+const eventText: string =  events.christmas.text;
 // >>>> End
 
 
 
-// >>> Start
+// Start
 const newMedia = new MediaFilesCreate();
 const delMedia = new MediaFilesDelete();
 const messages = new Messages();
