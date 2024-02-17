@@ -17,8 +17,8 @@ const compileFn: pug.compileTemplate = pug.compileFile('src/templates/' + templa
 (async function sendBulkEmails() {
   if (!qrUrl) throw 'Missing environment variable QR_HOST.';
 
-  const attendees = await getAttendees({ sentEmail: false, email: { $ne: '' } });
-  //const attendees = await getAttendees({ _id: '126634' });
+  const attendees = await getAttendees({ sentEmail: false, email: { $ne: '' }, onMp: false });
+  // const attendees = await getAttendees({ _id: '119104' });
 
 
   for (let i in attendees) {

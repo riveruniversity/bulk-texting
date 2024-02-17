@@ -6,6 +6,7 @@ export interface Attendee {
 	barcode: string;
 	fam?: boolean;
 	file?: string;
+  onMp?: boolean;
 
 	url?: string;
 
@@ -23,4 +24,4 @@ export interface AttendeeWithFile extends Attendee {
 
 export type Timestamp = `${number}${number}${number}${number}-${number}${number}-${number}${number} ${number}${number}:${number}${number}` | ''
 
-export type Daytime = 'morning' | 'afternoon' | 'evening'
+export type DayTime = 'morning' | 'afternoon' | 'evening'

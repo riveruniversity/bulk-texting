@@ -2,7 +2,7 @@
 import path from "path";
 const fs = require("fs");
 
-import { Attendee } from "../Types";
+import { Attendee, DayTime } from "../Types";
 
 export const color = {
     'black': 30,
@@ -86,4 +86,13 @@ export function showPercent(i: string, arr: Attendee[]): void
 {
     const percent: string = ((+i + 1) / arr.length * 100).toFixed(1)
     console.log('🔔', `${+i + 1} (${percent}%)`, arr[+i].barcode);
+}
+
+
+export function getDayTime(timestamp?: string ): DayTime {
+  const date: Date = timestamp ?  new Date(timestamp) : new Date();
+  const hours = date.getHours();
+
+  const dayTime = hours < 12 ? 'morning' : hours < 17 ? 'afternoon' : 'evening';
+  return dayTime;
 }

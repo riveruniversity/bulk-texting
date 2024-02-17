@@ -6,8 +6,8 @@ import { Message, MessageWithFile } from 'eztexting-node'
 import { Util } from 'eztexting-node'
 import { Log } from 'eztexting-node/build/service/Util'
 
-import { Attendee, AttendeeWithFile, Daytime, Timestamp } from './Types'
-import { showPercent, sleep } from './services/Util';
+import { Attendee, AttendeeWithFile, DayTime, Timestamp } from './Types'
+import { getDayTime, showPercent, sleep } from './services/Util';
 
 // import { attendees } from './data/attendees';
 import { events, qrUrl } from './data/vars';
@@ -16,10 +16,8 @@ import { getAttendees, updateAttendee } from './services/DB'
 
 
 // >>> Settings
-const timestamp: Timestamp = '2023-12-17 07:00'; //! SET TIMESTAMP 2022-11-20 15:00
-const dayTime: Daytime = 'morning'
-const badge: string = events.christmas.badge;
-const eventText: string =  events.christmas.text;
+const event = events.carShow;
+const timestamp: Timestamp = '2024-02-17 09:00'; //! SET TIMESTAMP 2022-11-20 15:00
 // >>>> End
 
 
@@ -34,14 +32,15 @@ const messages = new Messages();
 
   if (!qrUrl) throw "Missing environment variable QR_HOST."
 
-  const attendees = await getAttendees({ sentText: false, textError: { $exists: false}, phone: { $ne: '' } });
+  // [] needs to be sorted by phone no and household id
+  const attendees = await getAttendees({ sentText: false, textError: { $exists: false }, phone: { $ne: '' }, onMp: true });
   // const attendees = await getAttendees({ _id: '126634' });
 
   for (let i in attendees) {
     const attendee: Attendee = attendees[i];
     if (!attendee.phone) continue;
 
-    const file = Buffer.from(`${badge}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
+    const file = Buffer.from(`${event.badge}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
     const url = qrUrl + `/badges/${file}.png`
 
 
@@ -67,7 +66,7 @@ async function createMessage(attendee: AttendeeWithFile, error?: Error) {
 
   var text = ''
   if (!attendee.fam) {
-    text = `Good ${dayTime} ${attendee.first}. `+ eventText
+    text = `Good ${getDayTime(timestamp)} ${attendee.first}. \n${event.text} ${event.title}.`
   }
   else
     // var text = '' // doesn't work when sending blank text! => don't add Message param with blank text
@@ -89,7 +88,7 @@ async function deleteMediaFile(attendee: Attendee, message: MessageWithFile, err
     updateAttendee(attendee, { textError: errorMsg.detail })
   }
   else {
-    updateAttendee(attendee, { sentText: true})
+    updateAttendee(attendee, { sentText: true })
   }
 
   delMedia.deleteMediaFile(message, done)

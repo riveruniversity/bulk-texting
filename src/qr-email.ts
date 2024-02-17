@@ -6,36 +6,34 @@ import { Util } from 'eztexting-node';
 import { sendEmail } from './services/Email'
 // import { attendees } from './data/attendees';
 
-import { Attendee } from './Types'
-import { showPercent, sleep } from './services/Util';
+import { Attendee, DayTime } from './Types'
+import { getDayTime, showPercent, sleep } from './services/Util';
 import { events, qrUrl } from './data/vars';
 import { getAttendees, updateAttendee } from './services/DB';
 
 
 // >>> Settings
-const badge = events.carShow.badge
-const template = events.carShow.emailTemplate
+const event = events.carShow;
 // >>>> End
 
 
 
-const compileFn: pug.compileTemplate = pug.compileFile('src/templates/' + template, { compileDebug: true });
+const compileFn: pug.compileTemplate = pug.compileFile('src/templates/' + event.emailTemplate, { compileDebug: true });
 let failedAttempts = 0;
 
 // >>> Start
 (async function sendBulkEmailsWithBarcode() {
 
   if (!qrUrl) throw "Missing environment variable QR_HOST."
-  const attendees = await getAttendees({ sentEmail: false, email: { $ne: '' } });
+  const attendees = await getAttendees({ sentEmail: false, email: { $ne: '' }, onMp: true });
   // const attendees = await getAttendees({ _id: '126634' });
-
 
   for (let i in attendees) {
 
-    if (failedAttempts > 10 ) return;
+    if (failedAttempts > 10) return;
 
     const attendee: Attendee = attendees[i];
-    const file = Buffer.from(`${badge}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
+    const file = Buffer.from(`${event.badge}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
     attendee.url = qrUrl + `/badges/${file}.png`
 
     showPercent(i, attendees);
@@ -50,12 +48,12 @@ let failedAttempts = 0;
 
 
 
-async function createEmail(attendee: Attendee): Promise<Attendee> {
+async function createEmail(attendee: Attendee) { //: Promise<Attendee> {
 
   //_console.log('👤  Attendee: ', attendee.barcode)
-
-  const body: string = compileFn(attendee)
-  return sendEmail({ subject: `Digital Fast Pass (${attendee.first})`, body, to: attendee.email, person: attendee })
+  const params = { ...{first: attendee.first, url: attendee.url}, ...event, ...{ dayTime: getDayTime() } };
+  const body: string = compileFn(params)
+  return sendEmail({ subject: `Digital Fast Pass (${attendee.first})`, body, to: attendee.email, person: attendee });
 
 }
 //: -----------------------------------------
@@ -63,7 +61,7 @@ async function createEmail(attendee: Attendee): Promise<Attendee> {
 
 
 async function done(attendee: Attendee) {
-  updateAttendee(attendee, { sentEmail: true,  $unset: { emailError: "" } })
+  updateAttendee(attendee, { sentEmail: true, $unset: { emailError: "" } })
   failedAttempts = 0;
   console.log('✅  Done: ', attendee.barcode)
 }

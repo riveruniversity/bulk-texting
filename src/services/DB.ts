@@ -14,6 +14,7 @@ const attendeeSchema = new Schema<Attendee>({
   phone: String,
   barcode: String,
   fam: Boolean,
+  onMp: Boolean,
   sentEmail: { type: Boolean, default: false },
   sentText: { type: Boolean, default: false },
   textError: String,
