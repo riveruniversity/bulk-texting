@@ -10,6 +10,7 @@ import { qrUrl } from './data/vars';
 
 
 // >>> Settings
+const testRun = false;
 const template: string = 'car-show.waiver.pug'
 const compileFn: pug.compileTemplate = pug.compileFile('src/templates/' + template);
 
@@ -17,8 +18,8 @@ const compileFn: pug.compileTemplate = pug.compileFile('src/templates/' + templa
 (async function sendBulkEmails() {
   if (!qrUrl) throw 'Missing environment variable QR_HOST.';
 
-  const attendees = await getAttendees({ sentEmail: false, email: { $ne: '' }, onMp: false });
-  // const attendees = await getAttendees({ _id: '119104' });
+  const filter = testRun ? { _id: '126634' } : { sentEmail: false, email: { $ne: '' }, onMp: false };
+  const attendees =  await getAttendees(filter);
 
 
   for (let i in attendees) {

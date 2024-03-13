@@ -14,6 +14,7 @@ import { getAttendees, updateAttendee } from './services/DB';
 
 // >>> Settings
 const event = events.carShow;
+const testRun = false;
 // >>>> End
 
 
@@ -25,8 +26,8 @@ let failedAttempts = 0;
 (async function sendBulkEmailsWithBarcode() {
 
   if (!qrUrl) throw "Missing environment variable QR_HOST."
-  const attendees = await getAttendees({ sentEmail: false, email: { $ne: '' }, onMp: true });
-  // const attendees = await getAttendees({ _id: '126634' });
+  const filter = testRun ? { _id: '126634' } : { sentEmail: false, email: { $ne: '' }, onMp: true };
+  const attendees =  await getAttendees(filter);
 
   for (let i in attendees) {
 

@@ -17,7 +17,8 @@ import { getAttendees, updateAttendee } from './services/DB'
 
 // >>> Settings
 const event = events.carShow;
-const timestamp: Timestamp = '2024-02-17 09:00'; //! SET TIMESTAMP 2022-11-20 15:00
+const timestamp: Timestamp = '2024-03-09 10:00'; //! SET TIMESTAMP 2022-11-20 15:00
+const testRun = false;
 // >>>> End
 
 
@@ -33,8 +34,8 @@ const messages = new Messages();
   if (!qrUrl) throw "Missing environment variable QR_HOST."
 
   // [] needs to be sorted by phone no and household id
-  const attendees = await getAttendees({ sentText: false, textError: { $exists: false }, phone: { $ne: '' }, onMp: true });
-  // const attendees = await getAttendees({ _id: '126634' });
+  const filter = testRun ? { _id: '126634' } : { sentText: false, textError: { $exists: false }, phone: { $ne: '' }, onMp: true };
+  const attendees =  await getAttendees(filter);
 
   for (let i in attendees) {
     const attendee: Attendee = attendees[i];

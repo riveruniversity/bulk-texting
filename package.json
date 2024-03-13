@@ -6,10 +6,10 @@
   "scripts": {
     "start": "node build/index.js",
     "save-attendees": "nodemon src/data/attendees.ts --ext \"ts\" ",
-    "text": "nodemon src/text.ts",
     "email": "nodemon src/email.ts",
     "qr-email": "nodemon src/qr-email.ts",
     "qr-text": "nodemon src/qr-text.ts",
+    "text": "nodemon src/text.ts",
     "build": "tsc --project tsconfig.json"
   },
   "keywords": [
