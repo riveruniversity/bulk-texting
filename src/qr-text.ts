@@ -1,13 +1,10 @@
-// import axios from 'axios'
-import dotenv from 'dotenv'
-
 import { Messages, MediaFilesCreate, MediaFilesDelete } from 'eztexting-node'
 import { Message, MessageWithFile } from 'eztexting-node'
 import { Util } from 'eztexting-node'
 import { Log } from 'eztexting-node/build/service/Util'
 
 import { Attendee, AttendeeWithFile, DayTime, Timestamp } from './Types'
-import { getDayTime, showPercent, sleep } from './services/Util';
+import { fixNumber, getDayTime, showPercent, sleep } from './services/Util';
 
 // import { attendees } from './data/attendees';
 import { events, qrUrl } from './data/vars';
@@ -16,14 +13,13 @@ import { getAttendees, updateAttendee } from './services/DB'
 
 
 // >>> Settings
-const event = events.carShow;
-const timestamp: Timestamp = '2024-03-09 10:00'; //! SET TIMESTAMP 2022-11-20 15:00
+const event = events.womansConf;
+const timestamp: Timestamp = '2024-03-19 18:00'; //! SET TIMESTAMP 2022-11-20 15:00
 const testRun = false;
 // >>>> End
 
 
 
-// Start
 const newMedia = new MediaFilesCreate();
 const delMedia = new MediaFilesDelete();
 const messages = new Messages();
@@ -34,12 +30,13 @@ const messages = new Messages();
   if (!qrUrl) throw "Missing environment variable QR_HOST."
 
   // [] needs to be sorted by phone no and household id
+  if (testRun) console.log(`🚧 running in test mode!`);
   const filter = testRun ? { _id: '126634' } : { sentText: false, textError: { $exists: false }, phone: { $ne: '' }, onMp: true };
   const attendees =  await getAttendees(filter);
 
   for (let i in attendees) {
     const attendee: Attendee = attendees[i];
-    if (!attendee.phone) continue;
+    if (!fixNumber(attendee.phone)) continue;
 
     const file = Buffer.from(`${event.badge}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
     const url = qrUrl + `/badges/${file}.png`
@@ -73,7 +70,7 @@ async function createMessage(attendee: AttendeeWithFile, error?: Error) {
     // var text = '' // doesn't work when sending blank text! => don't add Message param with blank text
     var text = `${attendee.first}'s fast pass`
 
-  const message: MessageWithFile = { toNumbers: [attendee.phone], sendAt: timestamp, mediaFileId: attendee.file, message: text };
+  const message: MessageWithFile = { toNumbers: [fixNumber(attendee.phone)], sendAt: testRun ? '' : timestamp, mediaFileId: attendee.file, message: text };
 
   messages.sendMessage(message, attendee, deleteMediaFile)
 }

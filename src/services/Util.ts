@@ -4,20 +4,29 @@ const fs = require("fs");
 
 import { Attendee, DayTime } from "../Types";
 
-export const color = {
-    'black': 30,
-    'red': 31,
-    'green': 32,
-    'yellow': 33,
-    'dark blue': 34,
-    'purple': 35,
-    'turquoise': 36,
-    'white': 37
-}
 
-export function log(location: string, msg: any, color1: number = color.turquoise, textColor: number = color.white) {
+export function fixNumber(num: string | null, { addDashes } = { addDashes: true }) {
 
-    console.info(`\x1b[${color1}m[%s] \x1b[${textColor}m%s\x1b[0m`, location, msg);
+  if (!num) return ''
+
+  const cleaned = String(num).trim()
+    .replace(/(?<!^)\+|[^\d+]+/g, '')  // Remove non digits and keep the +
+    .replace(/^00/, '+')               // Remove preceding '00'
+    .replace(/^\+?1(?=\d{10})/, '')    // Remove preceding '+1' or '1' for American numbers     
+
+
+  if (cleaned.length == 10) {
+    if (addDashes)
+      return cleaned.replace(/^(\d{3})(\d{3})(\d{4})/, '$1-$2-$3')
+    else
+      return cleaned
+  }
+  else if (cleaned.includes('+')) {
+    return ''
+  }
+  else {
+    return ''
+  }
 }
 
 
@@ -95,4 +104,21 @@ export function getDayTime(timestamp?: string ): DayTime {
 
   const dayTime = hours < 12 ? 'morning' : hours < 17 ? 'afternoon' : 'evening';
   return dayTime;
+}
+
+
+export const color = {
+  'black': 30,
+  'red': 31,
+  'green': 32,
+  'yellow': 33,
+  'dark blue': 34,
+  'purple': 35,
+  'turquoise': 36,
+  'white': 37
+}
+
+export function log(location: string, msg: any, color1: number = color.turquoise, textColor: number = color.white) {
+
+  console.info(`\x1b[${color1}m[%s] \x1b[${textColor}m%s\x1b[0m`, location, msg);
 }

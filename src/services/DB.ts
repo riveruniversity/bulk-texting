@@ -1,5 +1,5 @@
 import { Schema, model, connect, HydratedDocument, Query, FilterQuery, UpdateWithAggregationPipeline, UpdateQuery } from 'mongoose';
-import { dbUser, dbPass } from '../data/vars';
+import { dbUser, dbPass, dbUrl } from '../data/vars';
 import { Attendee } from '../Types'
 import * as fs from 'fs';
 
@@ -23,10 +23,20 @@ const attendeeSchema = new Schema<Attendee>({
 
 const Attendee = model<Attendee>('Attendee', attendeeSchema);
 
+var db, dbInitiated;
+
 (async function connectDB() {
-  await connect('mongodb://127.0.0.1:27017/bulk')
-    .then(db => console.log(new Date().getTime(), '🔗 connected to MongoDB'))
-    .catch(err => console.log(err));
+
+  db = await connect(dbUrl)
+    .then(db => db)
+    .catch(err => {
+      console.log("🛑 ", err.message);
+      return null
+    });
+
+  if (db) console.log(new Date().getTime(), '🗃️  connected to MongoDB:', db.connection.name);
+
+  dbInitiated = true;
 })()
 
 export async function saveAttendee(attendee: Attendee) {

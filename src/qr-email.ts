@@ -6,14 +6,14 @@ import { Util } from 'eztexting-node';
 import { sendEmail } from './services/Email'
 // import { attendees } from './data/attendees';
 
-import { Attendee, DayTime } from './Types'
+import { Attendee } from './Types'
 import { getDayTime, showPercent, sleep } from './services/Util';
 import { events, qrUrl } from './data/vars';
 import { getAttendees, updateAttendee } from './services/DB';
 
 
 // >>> Settings
-const event = events.carShow;
+const event = events.womansConf;
 const testRun = false;
 // >>>> End
 
@@ -25,7 +25,9 @@ let failedAttempts = 0;
 // >>> Start
 (async function sendBulkEmailsWithBarcode() {
 
-  if (!qrUrl) throw "Missing environment variable QR_HOST."
+  if (!qrUrl) throw "Missing environment variable QR_HOST.";
+  if (testRun) console.log(`🚧 running in test mode!`);
+
   const filter = testRun ? { _id: '126634' } : { sentEmail: false, email: { $ne: '' }, onMp: true };
   const attendees =  await getAttendees(filter);
 
