@@ -31,12 +31,15 @@ const messages = new Messages();
 
   // [] needs to be sorted by phone no and household id
   if (testRun) console.log(`🚧 running in test mode!`);
-  const filter = testRun ? { _id: '126634' } : { sentText: false, textError: { $exists: false }, phone: { $ne: '' }, onMp: true };
+  const filter = testRun ? { _id: '126634' } : { sentText: false, textError: { $exists: false }, phone: { $ne: '', $not: /\+/ }, onMp: true };
   const attendees =  await getAttendees(filter);
 
   for (let i in attendees) {
     const attendee: Attendee = attendees[i];
-    if (!fixNumber(attendee.phone)) continue;
+    if (!fixNumber(attendee.phone)) {
+      console.log(`⏭️  skipped`, attendee.phone);
+      continue
+    }
 
     const file = Buffer.from(`${event.badge}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
     const url = qrUrl + `/badges/${file}.png`
