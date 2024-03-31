@@ -1,7 +1,8 @@
-import { Schema, model, connect, HydratedDocument, Query, FilterQuery, UpdateWithAggregationPipeline, UpdateQuery } from 'mongoose';
+import * as fs from 'fs';
+import { Schema, model, connect, HydratedDocument, Query, FilterQuery, UpdateWithAggregationPipeline, UpdateQuery, Mongoose } from 'mongoose';
 import { dbUser, dbPass, dbUrl } from '../data/vars';
 import { Attendee } from '../Types'
-import * as fs from 'fs';
+import { sleep } from './Util';
 
 
 
@@ -23,7 +24,9 @@ const attendeeSchema = new Schema<Attendee>({
 
 const Attendee = model<Attendee>('Attendee', attendeeSchema);
 
-var db, dbInitiated;
+
+var db: Mongoose | null;
+var dbInitiated: boolean = false;
 
 (async function connectDB() {
 
@@ -51,6 +54,9 @@ export async function updateAttendee(attendee: Attendee, update: UpdateWithAggre
 }
 
 export async function getAttendees(filter: FilterQuery<Attendee>): Promise<Attendee[]> {
+
+  if (!(await awaitDbInit('getAttendees'))) return [];
+
   console.log(new Date().getTime(), '👥 getting attendees from DB')
   return Attendee.find(filter || {})
 }
@@ -65,10 +71,23 @@ export async function saveAttendees(attendees: Attendee[]) {
       console.log(err.writeErrors.length, 'skipped.')
       fs.writeFileSync('src/data/errors.json', JSON.stringify(err.writeErrors, null, '\t'));
     })
+    .finally(() => db?.connection.close())
+}
+
+export async function closeConnection() {
+  await sleep(10000)
+  db?.connection.close();
 }
 
 
+async function awaitDbInit(task: string) {
+  while (!dbInitiated) {
+    await sleep(50);
+  }
 
+  if (!db) return console.log('DB not initialized. Did not execute '+ task);
+  else return true;
+}
 
 
 interface BulkInfo {

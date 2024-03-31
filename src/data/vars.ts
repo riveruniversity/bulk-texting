@@ -55,5 +55,11 @@ export const events = {
     badge: '657cb9264fa561c20a8b1ecb',
     emailTemplate: '',
     text: `Here is your digital fast pass for quick entrance. After checking in, head to the toy registration to get your toy giveaway bracelet.`
-  }
+  },
+  easterFest: {
+    badge: '66089b6d5c646f53f49e2e4f',
+    emailTemplate: '',
+    title: '',
+    text: `This pass is for quick entrance. After checking in, proceed to the giveaway sign-up to receive a wristband for your child. \n\nIf you have not yet registered your child, please use this link: https://revival.lpages.co/event-easter-fest-24-child-registration/?id=69617\n\nDoors open at 8:30am, Sunday March 30 at \n3738 River International Dr.\nTampa, FL 33610\n\nFree easter baskets are for children ages 1-12 and will be distributed only after service. Enjoy the 2024 Easter Extravaganza at the River Church.`,
+  },
 }

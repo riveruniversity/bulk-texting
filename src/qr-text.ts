@@ -8,13 +8,13 @@ import { fixNumber, getDayTime, showPercent, sleep } from './services/Util';
 
 // import { attendees } from './data/attendees';
 import { events, qrUrl } from './data/vars';
-import { getAttendees, updateAttendee } from './services/DB'
+import { closeConnection, getAttendees, updateAttendee } from './services/DB'
 
 
 
 // >>> Settings
-const event = events.womansConf;
-const timestamp: Timestamp = '2024-03-19 18:00'; //! SET TIMESTAMP 2022-11-20 15:00
+const event = events.easterFest;
+const timestamp: Timestamp = ''; //! SET TIMESTAMP 2022-11-20 15:00
 const testRun = false;
 // >>>> End
 
@@ -30,6 +30,7 @@ const messages = new Messages();
   if (!qrUrl) throw "Missing environment variable QR_HOST."
 
   // [] needs to be sorted by phone no and household id
+  
   if (testRun) console.log(`🚧 running in test mode!`);
   const filter = testRun ? { _id: '126634' } : { sentText: false, textError: { $exists: false }, phone: { $ne: '', $not: /\+/ }, onMp: true };
   const attendees =  await getAttendees(filter);
@@ -55,6 +56,7 @@ const messages = new Messages();
     // await createBarcode(attendee)
     await Util.sleep(911)
   }
+  closeConnection();
 })()
 //: -----------------------------------------
 
@@ -67,7 +69,7 @@ async function createMessage(attendee: AttendeeWithFile, error?: Error) {
 
   var text = ''
   if (!attendee.fam) {
-    text = `Good ${getDayTime(timestamp)} ${attendee.first}. \n${event.text} ${event.title}.`
+    text = `Good ${getDayTime(timestamp)} ${attendee.first}. \n${event.text}`
   }
   else
     // var text = '' // doesn't work when sending blank text! => don't add Message param with blank text
