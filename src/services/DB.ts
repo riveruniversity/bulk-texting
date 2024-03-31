@@ -30,6 +30,8 @@ var dbInitiated: boolean = false;
 
 (async function connectDB() {
 
+  console.log(`🔗 connecting to db ...`)
+
   db = await connect(dbUrl)
     .then(db => db)
     .catch(err => {
@@ -37,7 +39,7 @@ var dbInitiated: boolean = false;
       return null
     });
 
-  if (db) console.log(new Date().getTime(), '🗃️  connected to MongoDB:', db.connection.name);
+  if (db) console.log('🗃️  connected to MongoDB:', db.connection.name);
 
   dbInitiated = true;
 })()
@@ -57,7 +59,7 @@ export async function getAttendees(filter: FilterQuery<Attendee>): Promise<Atten
 
   if (!(await awaitDbInit('getAttendees'))) return [];
 
-  console.log(new Date().getTime(), '👥 getting attendees from DB')
+  console.log('👥 getting attendees from DB')
   return Attendee.find(filter || {})
 }
 
@@ -76,7 +78,9 @@ export async function saveAttendees(attendees: Attendee[]) {
 
 export async function closeConnection() {
   await sleep(10000)
+  
   db?.connection.close();
+  console.log('⏏️  db disconnected')
 }
 
 
