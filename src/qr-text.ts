@@ -13,7 +13,7 @@ import { closeConnection, getAttendees, updateAttendee } from './services/DB'
 
 
 // >>> Settings
-const event = events.easterFest;
+const event = events.womansConf;
 const timestamp: Timestamp = ''; //! SET TIMESTAMP 2022-11-20 15:00
 const testRun = false;
 // >>>> End
@@ -88,7 +88,10 @@ async function deleteMediaFile(attendee: Attendee, message: MessageWithFile, err
 
   if (error) {
     const errorMsg: EZError = error && JSON.parse(error.message);
-    updateAttendee(attendee, { textError: errorMsg.detail })
+    
+    const exclude = /(Additional Account Verification Needed)|(Insufficient Balance)/i;
+    if (!exclude.test(errorMsg.detail))
+      updateAttendee(attendee, { textError: errorMsg.detail })
   }
   else {
     updateAttendee(attendee, { sentText: true })

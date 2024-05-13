@@ -15,7 +15,7 @@ const messages = new Messages()
 
 // >>> Settings
 const event = events.carShow;
-const timestamp: Timestamp = '2024-03-09 10:00'; //! SET TIMESTAMP 2022-11-20 15:00
+const timestamp: Timestamp = '2024-05-11 10:00'; //! SET TIMESTAMP 2022-11-20 15:00
 // >>>> End
 
 
@@ -24,7 +24,7 @@ const timestamp: Timestamp = '2024-03-09 10:00'; //! SET TIMESTAMP 2022-11-20 15
 
   if (!qrUrl) throw "Missing environment variable QR_HOST."
 
-  const attendees = await getAttendees({ sentText: false, textError: { $exists: false }, phone: { $ne: '' }, fam: false, onMp: false }); // fam: false == send only to one person per phone
+  const attendees = await getAttendees({ sentText: false, textError: { $exists: false }, phone: { $ne: '', $not: /\+/ }, fam: false, onMp: false }); // fam: false == send only to one person per phone
   // const attendees = await getAttendees({ _id: '126634' });
   
 
@@ -50,11 +50,11 @@ async function createMessage(attendee: Attendee) {
   var text: string = `
 Good ${getDayTime(timestamp)},
 
+Thank you for being a part of the River Car Show.
+
 The River Car Show is held on private property. Every person entering the property is required to sign a Waiver and Liability Form.
 
-To bypass slow registration lines, please sign the waiver online at https://tinyurl.com/rivercarshow?id=${event.id}
-
-Thank you for being a part of the River Car Show.
+To bypass registration lines, please sign the waiver online at https://tinyurl.com/rivercarshow?id=${event.id}
 
 If you have any questions or comments, please email us at rivercarshow@gmail.com
 

@@ -1,11 +1,7 @@
 
 import pug from 'pug';
 
-import { Util } from 'eztexting-node';
-
 import { sendEmail } from './services/Email'
-// import { attendees } from './data/attendees';
-
 import { Attendee } from './Types'
 import { getDayTime, showPercent, sleep } from './services/Util';
 import { events, qrUrl } from './data/vars';
@@ -14,7 +10,7 @@ import { getAttendees, updateAttendee } from './services/DB';
 
 // >>> Settings
 const event = events.womansConf;
-const testRun = false;
+const testRun = true;
 // >>>> End
 
 
