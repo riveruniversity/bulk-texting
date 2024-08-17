@@ -9,8 +9,8 @@ import { getAttendees, updateAttendee } from './services/DB';
 
 
 // >>> Settings
-const event = events.womansConf;
-const testRun = true;
+const event = events.youthConference;
+const testRun = false;
 // >>>> End
 
 
@@ -24,24 +24,34 @@ let failedAttempts = 0;
   if (!qrUrl) throw "Missing environment variable QR_HOST.";
   if (testRun) console.log(`🚧 running in test mode!`);
 
-  const filter = testRun ? { _id: '126634' } : { sentEmail: false, email: { $ne: '' }, onMp: true };
-  const attendees =  await getAttendees(filter);
 
-  for (let i in attendees) {
+  while (true) {
 
-    if (failedAttempts > 10) return;
+    // const filter = testRun ? { _id: '126634' } : { sentText: false, textError: { $exists: true }, phone: { $ne: "" } };
+    const filter = testRun ? { _id: '126634' } : { sentEmail: false, email: { $ne: '' }, onMp: true, textError: { $exists: true } };
+    const attendees =  await getAttendees(filter);
+    console.log(attendees.length, 'attendees')
+  
+    for (let i in attendees) {
+  
+      if (failedAttempts > 10) return;
+  
+      const attendee: Attendee = attendees[i];
+      const file = Buffer.from(`${event.badge}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
+      attendee.url = qrUrl + `/badges/${file}.png`
+  
+      showPercent(i, attendees);
+  
+      await sleep(5000)
+      createEmail(attendee)
+        .then(done)
+        .catch((error) => failed(error, attendee))
+    }
 
-    const attendee: Attendee = attendees[i];
-    const file = Buffer.from(`${event.badge}:${attendee.barcode}:${attendee.first} ${attendee.last}`).toString('base64url');
-    attendee.url = qrUrl + `/badges/${file}.png`
-
-    showPercent(i, attendees);
-
-    await sleep(5000)
-    createEmail(attendee)
-      .then(done)
-      .catch((error) => failed(error, attendee))
+    await sleep(60000)
+    
   }
+
 })()
 //: -----------------------------------------
 

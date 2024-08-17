@@ -1,3 +1,6 @@
+- var month = new Date().toLocaleString('default', { month: 'long' });
+- var year = new Date().getFullYear();
+
 div(style='width: 100%; background: #E5E5E5; padding: 35px 0;')
   center
     div(style='padding: 2% 5%;')
@@ -8,7 +11,7 @@ div(style='width: 100%; background: #E5E5E5; padding: 35px 0;')
     div(style='padding: 2% 5%; color: #505050;')
       h3 Hello #{first},
       p
-        | We are excited that you are participating in the May 2024 River Car Show.
+        | We are excited that you are participating in the #{month} #{year} River Car Show.
       p
         | The River Car Show is held on private property. Every person entering the property is required to
         | sign a Waiver and Liability Form.

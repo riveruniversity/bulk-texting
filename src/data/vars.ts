@@ -17,11 +17,11 @@ export const events = {
     title: `Transfigured`,
     text:  `Present your digital fast pass along with your government-issued ID at the check-in. \nThank you for joining us at the 2024 Winter Camp Meeting - `
   },
-  mlc2023: {
-    badge: '65314cfc4fa561c20a8b1ec9',
-    emailTemplate: 'mlc-2023.badge.pug',
-    title: `Breakthrough`,
-    text:  `Present your digital fast pass along with your government-issued ID at the check-in. \nThank you for joining us at the 2024 Minister's & Leader's Conference - `
+  mlc2024: {
+    badge: '664901db327fad43c9d8a9ce',
+    emailTemplate: 'mlc-2024.badge.pug',
+    title: `The Shout`,
+    text:  `Present your digital fast pass along with your government-issued ID at the check-in. \nThank you for joining us at the 2024 Spring Minister's & Leader's Conference - The Shout`
   },
   mensConf: {
     badge: '64ef6630808c7da71dd2d213',
@@ -35,16 +35,17 @@ export const events = {
     title: `VIP`
   },
   youthConference: {
-    badge: '',
+    badge: '669561214ea2ea620a47b610',
     emailTemplate: 'conference.badge.pug',
-    text: ``
+    text: `Present your digital fast pass along with your government-issued ID at the Welcome Center. After checking in, please proceed to our wristband stations under the Pavilion to collect your Youth Week and/or Kids Week wristbands.`,
+    title: 'Relentless',
   },
   carShow: {
     badge: '64b05ebfd4698cd0f5b7a9a7',
     emailTemplate: 'car-show.badge.pug',
     text:  `Here is your digital River Car Club fast pass. Present your fast pass along with your government-issued ID at the check-in. \nThank you for being a part of the River Car Show!`,  
     title: 'River Car Show',
-    id: 69871
+    id: 69981
   },
   turkeyFest: {
     badge: '655957c04fa561c20a8b1eca',

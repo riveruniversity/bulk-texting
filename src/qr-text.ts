@@ -9,11 +9,12 @@ import { fixNumber, getDayTime, showPercent, sleep } from './services/Util';
 // import { attendees } from './data/attendees';
 import { events, qrUrl } from './data/vars';
 import { closeConnection, getAttendees, updateAttendee } from './services/DB'
+import { error } from 'console'
 
 
 
 // >>> Settings
-const event = events.womansConf;
+const event = events.youthConference;
 const timestamp: Timestamp = ''; //! SET TIMESTAMP 2022-11-20 15:00
 const testRun = false;
 // >>>> End
@@ -46,13 +47,18 @@ const messages = new Messages();
     const url = qrUrl + `/badges/${file}.png`
 
 
-    while (newMedia.activeHandles > 6) {
+    while (newMedia.activeHandles > 10) {
       await Util.sleep(500)
     }
 
     showPercent(i, attendees);
 
-    newMedia.createMediaFile(attendee, url, createMessage)
+    try {
+      newMedia.createMediaFile(attendee, url, createMessage)
+    }
+    catch(error) {
+      console.log(error)
+    }
     // await createBarcode(attendee)
     await Util.sleep(911)
   }
