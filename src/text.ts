@@ -15,7 +15,8 @@ const messages = new Messages()
 
 // >>> Settings
 const event = events.carShow;
-const timestamp: Timestamp = '2024-05-11 10:00'; //! SET TIMESTAMP 2022-11-20 15:00
+const timestamp: Timestamp = ''; //! SET TIMESTAMP 2022-11-20 15:00
+const testRun = false;
 // >>>> End
 
 
@@ -24,9 +25,8 @@ const timestamp: Timestamp = '2024-05-11 10:00'; //! SET TIMESTAMP 2022-11-20 15
 
   if (!qrUrl) throw "Missing environment variable QR_HOST."
 
-  const attendees = await getAttendees({ sentText: false, textError: { $exists: false }, phone: { $ne: '', $not: /\+/ }, fam: false, onMp: false }); // fam: false == send only to one person per phone
-  // const attendees = await getAttendees({ _id: '126634' });
-  
+  const filter = testRun ? { _id: '126634' } : { sentText: false, textError: { $exists: false }, phone: { $ne: '', $not: /\+/ }, fam: false, onMp: false }; // fam: false == send only to one person per phone
+  const attendees =  await getAttendees(filter);
 
 
   for (let i in attendees) {

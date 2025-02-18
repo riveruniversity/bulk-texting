@@ -45,7 +45,7 @@ export const events = {
     emailTemplate: 'car-show.badge.pug',
     text:  `Here is your digital River Car Club fast pass. Present your fast pass along with your government-issued ID at the check-in. \nThank you for being a part of the River Car Show!`,  
     title: 'River Car Show',
-    id: 69981
+    id: 70112
   },
   turkeyFest: {
     badge: '655957c04fa561c20a8b1eca',

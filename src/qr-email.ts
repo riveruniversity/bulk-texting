@@ -9,8 +9,8 @@ import { getAttendees, updateAttendee } from './services/DB';
 
 
 // >>> Settings
-const event = events.youthConference;
-const testRun = false;
+const event = events.carShow;
+const testRun = true;
 // >>>> End
 
 
@@ -49,7 +49,6 @@ let failedAttempts = 0;
     }
 
     await sleep(60000)
-    
   }
 
 })()

@@ -9,12 +9,11 @@ import { fixNumber, getDayTime, showPercent, sleep } from './services/Util';
 // import { attendees } from './data/attendees';
 import { events, qrUrl } from './data/vars';
 import { closeConnection, getAttendees, updateAttendee } from './services/DB'
-import { error } from 'console'
 
 
 
 // >>> Settings
-const event = events.youthConference;
+const event = events.carShow;
 const timestamp: Timestamp = ''; //! SET TIMESTAMP 2022-11-20 15:00
 const testRun = false;
 // >>>> End
